@@ -13,7 +13,7 @@ public class Simulation
     }
 
     
-
+    // klasa main
     public static void main(String[] args)
     {
         Simulation simulation = new Simulation();
