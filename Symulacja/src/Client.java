@@ -2,8 +2,6 @@ public abstract class Client
 {
     private int x;
     private int y;
-    private int speed;
-    private int ChanceOfGetting;
 
     public Client(int x, int y)
     {
@@ -11,8 +9,14 @@ public abstract class Client
         this.y = y;
     }
 
-    public abstract void move();
-    public abstract void TryToGet();
-
+    //public abstract void move();
+    public abstract boolean TryToGet();
 
 }
+
+
+
+
+
+
+
