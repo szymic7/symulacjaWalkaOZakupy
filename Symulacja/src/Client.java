@@ -9,7 +9,7 @@ public abstract class Client
         this.y = y;
     }
 
-    //public abstract void move();
+    public abstract void move();
     public abstract boolean TryToGet();
 
 }
