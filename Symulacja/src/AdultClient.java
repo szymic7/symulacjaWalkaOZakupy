@@ -15,9 +15,12 @@ public class AdultClient extends Client
         Random random = new Random();
         return random.nextDouble() <= ChanceOfGetting;
     }
+
+    public void move()
+    {
+
+    }
+
 }
-
-
-
 
 
