@@ -16,8 +16,9 @@ public class ChildClient extends Client
         return random.nextInt() <= ChanceOfGetting;
     }
 
+    public void move()
+    {
+
+    }
+
 }
-
-
-
-
