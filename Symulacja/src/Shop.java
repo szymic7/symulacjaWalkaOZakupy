@@ -1,12 +1,15 @@
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Shop
 {
     private static final int MapSize = 10;
     private static final int NumberOfPromotional = 5;
+    // zrobilbym w sumie te 2 rzeczy jako mozliwe do wpisywania, jako argumenty konstruktora
 
     private ArrayList<Client> clients;
+    private Map<Client, Integer> clientsPositions; // opcjonalnie
     private ArrayList<String> products;
     private Shelf shelf;
     private CashRegister cashRegister;
@@ -44,13 +47,16 @@ public class Shop
         cashRegister = new CashRegister();
     }
 
-    public void RunSimulation()
-    {
-        Random random = new Random();
-
+    public Client getClient(int indexOfClient){
+        return clients.get(indexOfClient);
     }
+    public int getClientXLocation(Client client){
+        return client.getXLocation();
+    }
+    public int getClientYLocation(Client client){
+        return client.getYLocation();
+    }
+    // musimy ustalic czy location podajemy jako jeden int, czy jako x i y i zmienić najwyzej
 
 
 }
-
-
