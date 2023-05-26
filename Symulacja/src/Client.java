@@ -10,11 +10,15 @@ public abstract class Client
     }
 
     public abstract void move();
-    public abstract boolean TryToGet();
+    public abstract boolean TryToGet(Product product);
+    public int getXLocation(){
+        return this.x;
+    }
+    public int getYLocation(){
+        return this.y;
+    }
 
 }
-
-
 
 
 
