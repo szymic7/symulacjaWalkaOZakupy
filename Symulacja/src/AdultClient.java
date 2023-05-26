@@ -10,10 +10,16 @@ public class AdultClient extends Client
         super(x, y);
     }
 
-    public boolean TryToGet()
+    public boolean TryToGet(Product product)
     {
-        Random random = new Random();
-        return random.nextDouble() <= ChanceOfGetting;
+        if(product.isPromotional()) {
+            Random random = new Random();
+            // return random.nextDouble(100) <= ChanceOfGetting;
+            return true;
+            // zawsze bedzie to prawda dla AdultClient, wiec mozemy po prostu zwrocic true
+        } else {
+            return false;
+        }
     }
 
     public void move()
@@ -22,5 +28,4 @@ public class AdultClient extends Client
     }
 
 }
-
 
