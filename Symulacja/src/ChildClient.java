@@ -10,10 +10,16 @@ public class ChildClient extends Client
         super(x, y);
     }
 
-    public boolean TryToGet()
+    public boolean TryToGet(Product product)
     {
-        Random random = new Random();
-        return random.nextInt() <= ChanceOfGetting;
+        if(product.isPromotional()){
+            Random random = new Random();
+            return random.nextInt(100) <= ChanceOfGetting;
+        } else {
+            return false;
+            // zmien kierunek ruchu, chyba ze to zrobimy w klasie Shop, a ta metoda bedzie tylko zwracac boola
+        }
+
     }
 
     public void move()
@@ -22,3 +28,4 @@ public class ChildClient extends Client
     }
 
 }
+
