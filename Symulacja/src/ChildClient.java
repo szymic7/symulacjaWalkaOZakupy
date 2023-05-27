@@ -28,4 +28,3 @@ public class ChildClient extends Client
     }
 
 }
-
