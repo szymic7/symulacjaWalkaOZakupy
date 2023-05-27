@@ -5,8 +5,8 @@ public class Simulation
 {
     private Shop shop;
     private ArrayList<Client> clients;
-    public Simulation(){
-        this.shop = new Shop();
+    public Simulation(int numberOfPromotional){
+        this.shop = new Shop(numberOfPromotional);
         this.clients = new ArrayList<Client>();
     }
     public void runSimulation(){
@@ -19,7 +19,7 @@ public class Simulation
     {
         // np mozna zrobic tak, ze w argumentach konstruktora obiektu Simulation, beda wymagane argumenty
         // ktore beda argumentami konstruktora Shop (np. liczba klientow, liczba produktow promocyjnych)
-        Simulation simulation = new Simulation(/* np int numberOfClients, int numberOfPromotionalProducts */);
+        Simulation simulation = new Simulation(10);
         simulation.runSimulation();
     }
 
