@@ -12,3 +12,4 @@ class Product
         return isPromotional;
     }
 }
+
