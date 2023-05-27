@@ -1,51 +1,69 @@
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Shop
 {
-    private static final int MapSize = 10;
-    private static final int NumberOfPromotional = 5;
-    // zrobilbym w sumie te 2 rzeczy jako mozliwe do wpisywania, jako argumenty konstruktora
-
+    private static final int MapSize = 20;
+    private int numberOfPromotional;
     private ArrayList<Client> clients;
-    private Map<Client, Integer> clientsPositions; // opcjonalnie
-    private ArrayList<String> products;
+    private ArrayList<Product> products;
     private Shelf shelf;
     private CashRegister cashRegister;
 
-    public Shop()
+    public Shop(int numberOfPromotional)
     {
+        this.numberOfPromotional = numberOfPromotional;
+
         clients = new ArrayList<>();
         Random random = new Random();
 
-        for(int i=0; i<2; i++)
-        {
-            int x = random.nextInt(MapSize+1);
-            int y = random.nextInt(MapSize+1);
+        Integer[][] respCoordinates = new Integer[3][2];
 
-            clients.add(new ChildClient(x, y));
-        }
+        // create & spawn ChildClient
+        int x = random.nextInt(MapSize);
+        int y = random.nextInt(5);
+        respCoordinates[0][0] = x;
+        respCoordinates[0][1] = y;
+        clients.add(new ChildClient(x, y));
 
-        for(int i=0; i<2; i++)
-        {
-            int x = random.nextInt(MapSize+1);
-            int y = random.nextInt(MapSize+1);
+        // create & spawn AdultClient
+        do {
+            x = random.nextInt(MapSize);
+            y = random.nextInt(5);
+            if (x != respCoordinates[0][0] || y != respCoordinates[0][1]) {
+                clients.add(new AdultClient(x, y));
+                respCoordinates[1][0] = x;
+                respCoordinates[1][1] = y;
+            }
+        } while(clients.size()<2);
 
-            clients.add(new AdultClient(x, y));
-        }
+        // create & spawn ElderlyClient
+        do {
+            x = random.nextInt(MapSize);
+            y = random.nextInt(5);
+            if ((x != respCoordinates[0][0] || y != respCoordinates[0][1]) && (x != respCoordinates[1][0] || y != respCoordinates[1][1])) {
+                clients.add(new ElderlyClient(x, y));
+                respCoordinates[2][0] = x;
+                respCoordinates[2][1] = y;
+            }
+        } while(clients.size()<3);
 
-        for(int i=0; i<2; i++)
-        {
-            int x = random.nextInt(MapSize+1);
-            int y = random.nextInt(MapSize+1);
-
-            clients.add(new ElderlyClient(x, y));
-        }
-
-        shelf = new Shelf(NumberOfPromotional);
+        shelf = new Shelf(numberOfPromotional);
         cashRegister = new CashRegister();
+
+        // create nonPromotionalProducts
+        for(int i=0; i<60; i++){
+            products.add(new Product(false));
+        }
+
+        // swap radnom products for PromotionalProducts
+        for(int i=0; i<numberOfPromotional; i++)
+        {
+            int a = random.nextInt(60);
+            products.set(a, new Product(true));
+        }
     }
+
 
     public Client getClient(int indexOfClient){
         return clients.get(indexOfClient);
@@ -60,3 +78,6 @@ public class Shop
 
 
 }
+
+// {(0,0), (1,0), (2,0), (3,0), (4,0)}
+
