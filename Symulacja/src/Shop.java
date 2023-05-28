@@ -7,19 +7,14 @@ public class Shop
     private int numberOfPromotional;
     private ArrayList<Client> clients;
     private ArrayList<Product> products;
-    private Shelf shelf;
-    private CashRegister cashRegister;
 
     public Shop(int numberOfPromotional)
     {
-        this.numberOfPromotional = numberOfPromotional;
-
         clients = new ArrayList<>();
-        Random random = new Random();
-
         Integer[][] respCoordinates = new Integer[3][2];
 
         // create & spawn ChildClient
+        Random random = new Random();
         int x = random.nextInt(MapSize);
         int y = random.nextInt(5);
         respCoordinates[0][0] = x;
@@ -48,25 +43,40 @@ public class Shop
             }
         } while(clients.size()<3);
 
-        shelf = new Shelf(numberOfPromotional);
-        cashRegister = new CashRegister();
+
+        this.numberOfPromotional = numberOfPromotional;
+        products = new ArrayList<Product>();
 
         // create nonPromotionalProducts
-        for(int i=0; i<60; i++){
-            products.add(new Product(false));
+        for(int y1=5; y1<15; y1++){
+            products.add(new Product(2, y1, false));
+            products.add(new Product(5, y1, false));
+            products.add(new Product(8, y1, false));
+            products.add(new Product(11, y1, false));
+            products.add(new Product(14, y1, false));
+            products.add(new Product(17, y1, false));
         }
 
-        // swap radnom products for PromotionalProducts
+        // swap random products for PromotionalProducts
         for(int i=0; i<numberOfPromotional; i++)
         {
+            random = new Random();
             int a = random.nextInt(60);
-            products.set(a, new Product(true));
+            int productX = products.get(a).getX();
+            int productY = products.get(a).getY();
+            products.set(a, new Product(productX, productY, true));
         }
     }
 
 
     public Client getClient(int indexOfClient){
         return clients.get(indexOfClient);
+    }
+    public ArrayList<Client> getClients(){
+        return clients;
+    }
+    public ArrayList<Product> getProducts(){
+        return products;
     }
     public int getClientXLocation(Client client){
         return client.getXLocation();
@@ -80,4 +90,3 @@ public class Shop
 }
 
 // {(0,0), (1,0), (2,0), (3,0), (4,0)}
-
