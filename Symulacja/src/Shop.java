@@ -85,13 +85,11 @@ public class Shop
         return client.getYLocation();
     }
     // musimy ustalic czy location podajemy jako jeden int, czy jako x i y i zmienić najwyzej
-
+    public void clientLeaves(Client client) {
+            if(client.getXLocation()>=18 && client.getYLocation()>=18){
+                clients.remove(client);
+                System.out.println("Klient opuscil sklep.");
+            }
+    }
 
 }
-
-
-
-
-
-
-
