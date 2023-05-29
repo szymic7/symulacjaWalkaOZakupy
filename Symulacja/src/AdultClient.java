@@ -1,4 +1,4 @@
-public class AdultClient extends Client
+public class AdultClient extends Client implements IClient
 {
     //private static final double ChanceOfGetting = 100;
     //private static final int speed = 75;
