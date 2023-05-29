@@ -10,7 +10,7 @@ public class Simulation
     public void runSimulation(){
         Random random = new Random();
         //while(!shop.getClients().isEmpty()){
-            // tu bedzie cala iteracja
+          
         for(int i=0; i<100; i++) {
             shop.getClient(0).move();
             System.out.println("x = " + shop.getClient(0).getXLocation() + ", y = " + shop.getClient(0).getYLocation());
