@@ -22,13 +22,14 @@ public abstract class Client implements IClient
         int newX;
         int newY;
         if(random.nextInt(100)<this.speed)
-        {   // zmienna speed warunkuje prawdopodobienstwo wykonania ruchu
+        {   // zmienna speed warunkuje prawdopodobienstwo wykonania ruchu (wart. zmiennej speed = % szans na ruch)
             do {
                 newX = random.nextInt(3)-1;
                 newY = random.nextInt(3)-1;
             } while ( (this.x + newX) < 0 || (this.x + newX) > 19 || (this.y + newY) < 0 || (this.y + newY) > 19
                     || ( ( (this.y + newY) >= 5 && (this.y + newY) <= 14 ) && (this.x + newX == 3 || this.x + newX == 4
-                    || this.x + newX == 9 || this.x + newX == 10 || this.x + newX == 15 || this.x + newX == 16) ) );
+                    || this.x + newX == 9 || this.x + newX == 10 || this.x + newX == 15 || this.x + newX == 16) ) ||
+                    (newX==0 && newY==0) );
             this.x = this.x + newX;
             this.y = this.y + newY;
             int directionX = newX;
@@ -36,6 +37,13 @@ public abstract class Client implements IClient
         }
     }
 
+    public int getXLocation()
+    {
+        return this.x;
+    }
+    public int getYLocation(){
+        return this.y;
+    }
     public int getChanceOfGetting()
     {
         return this.ChanceOfGetting;
@@ -58,16 +66,12 @@ public abstract class Client implements IClient
     public boolean TryToBuy(Product product)
     {
         Random random = new Random();
-        return random.nextInt(100) < this.getChanceOfGetting();
-    }
-
-    public int getXLocation()
-    {
-        return this.x;
-    }
-
-    public int getYLocation(){
-        return this.y;
+        if(random.nextInt(100) < this.getChanceOfGetting()){
+            product.isSold();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
@@ -78,7 +82,3 @@ interface IClient
     int TryToGet(ArrayList<Product> products);
     boolean TryToBuy(Product product);
 }
-
-
-
-
