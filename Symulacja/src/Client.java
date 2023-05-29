@@ -76,6 +76,7 @@ interface IClient
 {
     void move();
     int TryToGet(ArrayList<Product> products);
+    boolean TryToBuy(Product product);
 }
 
 
