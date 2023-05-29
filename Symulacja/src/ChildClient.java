@@ -1,4 +1,4 @@
-public class ChildClient extends Client implements IClient
+public class ChildClient extends Client
 {
     public ChildClient(int x, int y)
     {
