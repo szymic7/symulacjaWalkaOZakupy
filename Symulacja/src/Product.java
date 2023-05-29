@@ -21,4 +21,7 @@ class Product
     {
         return isPromotional;
     }
+    public void isSold(){
+        this.isPromotional = false;
+    }
 }
