@@ -10,25 +10,20 @@ public class Simulation
     public void runSimulation(){
         Random random = new Random();
         //while(!shop.getClients().isEmpty()){
-          
-        for(int i=0; i<100; i++) {
-            shop.getClient(0).move();
-            System.out.println("x = " + shop.getClient(0).getXLocation() + ", y = " + shop.getClient(0).getYLocation());
-            if ((shop.getClient(0).TryToGet(shop.getProducts())) > -1) {
-                if (shop.getClient(0).TryToBuy(shop.getProducts().get(shop.getClient(0).TryToGet(shop.getProducts())))) {
-                    System.out.println("Zakupiono przedmiot");
-                } else {
-                    System.out.println("Nie udalo sie zakupic przedmiotu");
+        for(int i=0; i<50; i++) {
+            for(int j = 0; j < 3; j++) {
+                shop.getClient(j).move();
+                System.out.println("Klient(" + j + "): x = " + shop.getClient(j).getXLocation() + ", y = " + shop.getClient(j).getYLocation());
+                if ((shop.getClient(j).TryToGet(shop.getProducts())) > -1) {
+                    if (shop.getClient(j).TryToBuy(shop.getProducts().get(shop.getClient(j).TryToGet(shop.getProducts())))) {
+                        System.out.println("Klient(" + j + ") zakupil produkt.");
+                    } else {
+                        System.out.println("Klientowi(" + j + ") nie udalo sie zakupic produktu.");
+                    }
                 }
+                shop.clientLeaves(shop.getClient(j));
             }
         }
-            //shop.getClient(1).move();
-            //System.out.println(shop.getClient(1).getXLocation());
-            //System.out.println(shop.getClient(1).getYLocation());
-            //shop.getClient(2).move();
-            //System.out.println(shop.getClient(2).getXLocation());
-            //System.out.println(shop.getClient(2).getYLocation());
-        //}
     }
     public static void main(String[] args)
     {
