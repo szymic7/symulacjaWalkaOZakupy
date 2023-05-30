@@ -21,8 +21,8 @@ public abstract class Client implements IClient
         Random random = new Random();
         int newX;
         int newY;
-        if(random.nextInt(100)<this.speed)
-        {   // zmienna speed warunkuje prawdopodobienstwo wykonania ruchu (wart. zmiennej speed = % szans na ruch)
+        if(random.nextInt(100)<this.speed) // zmienna speed warunkuje prawdopodobienstwo wykonania ruchu (wart. zmiennej speed = % szans na ruch)
+        {
             do {
                 newX = random.nextInt(3)-1;
                 newY = random.nextInt(3)-1;
@@ -81,4 +81,9 @@ interface IClient
     void move();
     int TryToGet(ArrayList<Product> products);
     boolean TryToBuy(Product product);
+    //boolean letElderlyGo(Client client);
 }
+
+
+
+
