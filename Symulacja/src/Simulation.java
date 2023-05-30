@@ -16,9 +16,9 @@ public class Simulation
                 System.out.println("Klient(" + j + "): x = " + shop.getClient(j).getXLocation() + ", y = " + shop.getClient(j).getYLocation());
                 if ((shop.getClient(j).TryToGet(shop.getProducts())) > -1) {
                     if (shop.getClient(j).TryToBuy(shop.getProducts().get(shop.getClient(j).TryToGet(shop.getProducts())))) {
-                        System.out.println("Klient(" + j + ") zakupil produkt.");
+                        System.out.println("Klient(" + j + ") zakupil produkt promocyjny.");
                     } else {
-                        System.out.println("Klientowi(" + j + ") nie udalo sie zakupic produktu.");
+                        System.out.println("Klientowi(" + j + ") nie udalo sie zakupic produktu promocyjnego.");
                     }
                 }
                 shop.clientLeaves(shop.getClient(j));
