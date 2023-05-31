@@ -74,7 +74,7 @@ public class Simulation
 
     public static void main(String[] args)
     {
-        Simulation simulation = new Simulation(60, 2, 2, 2);
+        Simulation simulation = new Simulation(60, 1, 1, 1);
         simulation.runSimulation();
     }
 
