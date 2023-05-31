@@ -7,49 +7,111 @@ public class Shop
     private int numberOfPromotional;
     private ArrayList<Client> clients;
     private ArrayList<Product> products;
+    private int numberOfChild;
+    private int numberOfAdult;
+    private int numberOfElderly;
 
-    public Shop(int numberOfPromotional)
+    public Shop(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
+        this.numberOfChild = numberOfChild;
+        this.numberOfAdult = numberOfAdult;
+        this.numberOfElderly = numberOfElderly;
+
+        int AllClients = this.numberOfAdult + this.numberOfChild + this.numberOfElderly;
+
         clients = new ArrayList<>();
-        Integer[][] respCoordinates = new Integer[3][2];
+        Integer[][] respCoordinates = new Integer[AllClients][2];
         ArrayList<Integer> randomPromotional = new ArrayList<>();
+        Random random = new Random();
 
         // create & spawn ChildClient
-        Random random = new Random();
-        int x = random.nextInt(MapSize);
-        int y = random.nextInt(5);
-        respCoordinates[0][0] = x;
-        respCoordinates[0][1] = y;
-        clients.add(new ChildClient(x, y));
+        int i=0;
+        do{
+            int x = random.nextInt(MapSize);
+            int y = random.nextInt(5);
+
+            if(i==0)
+            {
+                respCoordinates[i][0] = x;
+                respCoordinates[i][1] = y;
+                clients.add(new ChildClient(x, y));
+                i++;
+            }
+            else
+            {
+                int check = 0;
+                for(int j=0; j<i; j++)
+                {
+                    if ((x == respCoordinates[j][0] && y == respCoordinates[j][1]))
+                    {
+                        check++;
+                        break;
+                    }
+                }
+                if(check==0)
+                {
+                    respCoordinates[i][0] = x;
+                    respCoordinates[i][1] = y;
+                    clients.add(new ChildClient(x, y));
+                    i++;
+                }
+            }
+        }while(i<numberOfChild);
 
         // create & spawn AdultClient
-        do {
-            x = random.nextInt(MapSize);
-            y = random.nextInt(5);
-            if (x != respCoordinates[0][0] || y != respCoordinates[0][1]) {
-                clients.add(new AdultClient(x, y));
-                respCoordinates[1][0] = x;
-                respCoordinates[1][1] = y;
+        do{
+            int x = random.nextInt(MapSize);
+            int y = random.nextInt(5);
+            int check = 0;
+
+            for(int j=0; j<i; j++)
+            {
+                if ((x == respCoordinates[j][0] && y == respCoordinates[j][1]))
+                {
+                    check++;
+                    break;
+                }
             }
-        } while(clients.size()<2);
+            if(check==0)
+            {
+                respCoordinates[i][0] = x;
+                respCoordinates[i][1] = y;
+                clients.add(new AdultClient(x, y));
+                i++;
+            }
+
+        } while(i<(numberOfAdult+numberOfChild));
 
         // create & spawn ElderlyClient
         do {
-            x = random.nextInt(MapSize);
-            y = random.nextInt(5);
-            if ((x != respCoordinates[0][0] || y != respCoordinates[0][1]) && (x != respCoordinates[1][0] || y != respCoordinates[1][1])) {
-                clients.add(new ElderlyClient(x, y));
-                respCoordinates[2][0] = x;
-                respCoordinates[2][1] = y;
+            int x = random.nextInt(MapSize);
+            int y = random.nextInt(5);
+            int check=0;
+
+            for(int j=0; j<i; j++)
+            {
+                if ((x == respCoordinates[j][0] && y == respCoordinates[j][1]))
+                {
+                    check++;
+                    break;
+                }
             }
-        } while(clients.size()<3);
+            if(check==0)
+            {
+                respCoordinates[i][0] = x;
+                respCoordinates[i][1] = y;
+                clients.add(new ElderlyClient(x, y));
+                i++;
+            }
+        } while(i<(AllClients));
 
 
         this.numberOfPromotional = numberOfPromotional;
         products = new ArrayList<Product>();
 
         // create nonPromotionalProducts
-        for(int y1=5; y1<15; y1++){
+        for(int y1=5; y1<15; y1++)
+        {
             products.add(new Product(2, y1, false));
             products.add(new Product(5, y1, false));
             products.add(new Product(8, y1, false));
@@ -59,7 +121,7 @@ public class Shop
         }
 
         // swap random products for PromotionalProducts
-        int i=0;
+        i=0;
         do{
             random = new Random();
             int a = random.nextInt(60);
@@ -92,30 +154,45 @@ public class Shop
                     i++;
                 }
             }
+
         }while(i<numberOfPromotional);
     }
 
-
-    public Client getClient(int indexOfClient){
+    public Client getClient(int indexOfClient)
+    {
         return clients.get(indexOfClient);
     }
-    public ArrayList<Client> getClients(){
+
+    public ArrayList<Client> getClients()
+    {
         return clients;
     }
-    public ArrayList<Product> getProducts(){
+
+    public ArrayList<Product> getProducts()
+    {
         return products;
     }
-    public int getClientXLocation(Client client){
+
+    public int getClientXLocation(Client client)
+    {
         return client.getXLocation();
     }
-    public int getClientYLocation(Client client){
+
+    public int getClientYLocation(Client client)
+    {
         return client.getYLocation();
     }
-    public void clientLeaves(Client client) {
-            if(client.getXLocation()>=18 && client.getYLocation()>=18){
-                clients.remove(client);
-                System.out.println("Klient opuscil sklep.");
-            }
+
+    public void clientLeaves(Client client)
+    {
+        if(client.getXLocation()>=18 && client.getYLocation()>=18)
+        {
+            clients.remove(client);
+            System.out.println("Klient opuscil sklep.");
+        }
     }
 
 }
+
+
+
