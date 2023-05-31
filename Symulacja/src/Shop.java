@@ -12,6 +12,7 @@ public class Shop
     {
         clients = new ArrayList<>();
         Integer[][] respCoordinates = new Integer[3][2];
+        ArrayList<Integer> randomPromotional = new ArrayList<>();
 
         // create & spawn ChildClient
         Random random = new Random();
