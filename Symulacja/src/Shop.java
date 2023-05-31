@@ -27,8 +27,8 @@ public class Shop
         // create & spawn ChildClient
         int i=0;
         do{
-            int x = random.nextInt(MapSize);
-            int y = random.nextInt(5);
+            int x = random.nextInt(MapSize-1);
+            int y = random.nextInt(4);
 
             if(i==0)
             {
@@ -60,8 +60,8 @@ public class Shop
 
         // create & spawn AdultClient
         do{
-            int x = random.nextInt(MapSize);
-            int y = random.nextInt(5);
+            int x = random.nextInt(MapSize-1);
+            int y = random.nextInt(4);
             int check = 0;
 
             for(int j=0; j<i; j++)
@@ -84,7 +84,7 @@ public class Shop
 
         // create & spawn ElderlyClient
         do {
-            int x = random.nextInt(MapSize);
+            int x = random.nextInt(MapSize-1);
             int y = random.nextInt(5);
             int check=0;
 
