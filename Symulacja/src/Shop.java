@@ -58,14 +58,40 @@ public class Shop
         }
 
         // swap random products for PromotionalProducts
-        for(int i=0; i<numberOfPromotional; i++)
-        {
+        int i=0;
+        do{
             random = new Random();
             int a = random.nextInt(60);
-            int productX = products.get(a).getX();
-            int productY = products.get(a).getY();
-            products.set(a, new Product(productX, productY, true));
-        }
+
+            if(i==0)
+            {
+                int productX = products.get(a).getX();
+                int productY = products.get(a).getY();
+                products.set(a, new Product(productX, productY, true));
+                randomPromotional.add(a);
+                i++;
+            }
+            else
+            {
+                int check = 0;
+                for(int j=0; j<randomPromotional.size(); j++)
+                {
+                    if(a == randomPromotional.get(j))
+                    {
+                        check++;
+                        break;
+                    }
+                }
+                if(check==0)
+                {
+                    int productX = products.get(a).getX();
+                    int productY = products.get(a).getY();
+                    products.set(a, new Product(productX, productY, true));
+                    randomPromotional.add(a);
+                    i++;
+                }
+            }
+        }while(i<numberOfPromotional);
     }
 
 
