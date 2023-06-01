@@ -75,7 +75,7 @@ public class Simulation
         int numberOfPromotional = 60;
         int numberOfChild = 3;
         int numberOfAdult = 3;
-        int numberOfElderly =3;
+        int numberOfElderly = 3;
 
         Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         simulation.runSimulation(numberOfChild, numberOfAdult, numberOfElderly);
