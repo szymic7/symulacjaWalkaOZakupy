@@ -2,6 +2,6 @@ public class AdultClient extends Client
 {
     public AdultClient(int x, int y)
     {
-        super(x, y, 100, 90);
+        super(x, y, 100, 85);
     }
 }
