@@ -18,7 +18,7 @@ public class Simulation
         }
     }
 
-    public void runSimulation()
+    public void runSimulation(int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         Random random = new Random();
 
@@ -36,17 +36,15 @@ public class Simulation
                 // interakcje miedzy klientami
                 for(int j=0; j<shop.getClients().size(); j++)
                 {
-                    if(clientsIndexes.get(shop.getClient(j))!=clientsIndexes.get(shop.getClient(i)))
+                    if((shop.getClient(i).getXLocation() == shop.getClient(j).getXLocation()) &&
+                            (shop.getClient(i).getYLocation() == shop.getClient(j).getYLocation()))
                     {
-                        if ((shop.getClient(i).getXLocation() == shop.getClient(j).getXLocation()) &&
-                                (shop.getClient(i).getYLocation() == shop.getClient(j).getYLocation()))
+                        if((clientsIndexes.get(shop.getClient(i))<numberOfChild && clientsIndexes.get(shop.getClient(j))>=numberOfChild) ||
+                                (clientsIndexes.get(shop.getClient(i))<(numberOfAdult+numberOfChild) && clientsIndexes.get(shop.getClient(j))>=(numberOfAdult+numberOfChild)))
                         {
-                            if(clientsIndexes.get(shop.getClient(i))<clientsIndexes.get(shop.getClient(j)))
-                            {
-                                System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
-                                        "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
-                                i++;
-                            }
+                            System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
+                                    "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
+                            i++;
                         }
                     }
                 }
@@ -74,12 +72,14 @@ public class Simulation
 
     public static void main(String[] args)
     {
-        Simulation simulation = new Simulation(60, 1, 1, 1);
-        simulation.runSimulation();
+        int numberOfPromotional = 60;
+        int numberOfChild = 3;
+        int numberOfAdult = 3;
+        int numberOfElderly =3;
+
+        Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        simulation.runSimulation(numberOfChild, numberOfAdult, numberOfElderly);
     }
 
 }
-
-
-
 
