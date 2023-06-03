@@ -173,16 +173,6 @@ public class Shop
         return products;
     }
 
-    public int getClientXLocation(Client client)
-    {
-        return client.getXLocation();
-    }
-
-    public int getClientYLocation(Client client)
-    {
-        return client.getYLocation();
-    }
-
     public void clientLeaves(Client client)
     {
         if(client.getXLocation()>=18 && client.getYLocation()>=18)
