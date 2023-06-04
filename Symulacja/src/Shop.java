@@ -4,31 +4,34 @@ import java.util.ArrayList;
 public class Shop
 {
     private static final int MapSize = 20;
-    private int numberOfPromotional;
     private ArrayList<Client> clients;
     private ArrayList<Product> products;
+    private int numberOfPromotional;
     private int numberOfChild;
     private int numberOfAdult;
     private int numberOfElderly;
 
     public Shop(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
+        this.clients = new ArrayList<>();
+        this.products = new ArrayList<Product>();
+        this.numberOfPromotional = numberOfPromotional;
         this.numberOfChild = numberOfChild;
         this.numberOfAdult = numberOfAdult;
         this.numberOfElderly = numberOfElderly;
 
-        int AllClients = this.numberOfAdult + this.numberOfChild + this.numberOfElderly;
-
-        clients = new ArrayList<>();
-        Integer[][] respCoordinates = new Integer[AllClients][2];
+        // zmienne potrzebne do inicjalizowania
+        int allClients = this.numberOfAdult + this.numberOfChild + this.numberOfElderly;
+        Integer[][] respCoordinates = new Integer[allClients][2];
         ArrayList<Integer> randomPromotional = new ArrayList<>();
+
         Random random = new Random();
 
         // create & spawn ChildClient
         int i=0;
-        do{
+        while(i<numberOfChild){
             int x = random.nextInt(MapSize);
-            int y = random.nextInt(5);
+            int y = random.nextInt(4);
 
             if(i==0)
             {
@@ -56,12 +59,12 @@ public class Shop
                     i++;
                 }
             }
-        }while(i<numberOfChild);
+        }
 
         // create & spawn AdultClient
-        do{
+        while(i<(numberOfAdult+numberOfChild)){
             int x = random.nextInt(MapSize);
-            int y = random.nextInt(5);
+            int y = random.nextInt(4);
             int check = 0;
 
             for(int j=0; j<i; j++)
@@ -80,10 +83,10 @@ public class Shop
                 i++;
             }
 
-        } while(i<(numberOfAdult+numberOfChild));
+        }
 
         // create & spawn ElderlyClient
-        do {
+        while(i<(allClients)){
             int x = random.nextInt(MapSize);
             int y = random.nextInt(5);
             int check=0;
@@ -103,11 +106,7 @@ public class Shop
                 clients.add(new ElderlyClient(x, y));
                 i++;
             }
-        } while(i<(AllClients));
-
-
-        this.numberOfPromotional = numberOfPromotional;
-        products = new ArrayList<Product>();
+        }
 
         // create nonPromotionalProducts
         for(int y1=5; y1<15; y1++)
