@@ -5,14 +5,14 @@ public abstract class Client implements IClient
 {
     private int x;
     private int y;
-    private int ChanceOfGetting;
+    private int chanceOfGetting;
     private int speed;
 
-    public Client(int x, int y, int ChanceOfGetting, int speed)
+    public Client(int x, int y, int chanceOfGetting, int speed)
     {
         this.x = x;
         this.y = y;
-        this.ChanceOfGetting = ChanceOfGetting;
+        this.chanceOfGetting = chanceOfGetting;
         this.speed = speed;
     }
 
@@ -32,8 +32,6 @@ public abstract class Client implements IClient
                     (newX==0 && newY==0) );
             this.x = this.x + newX;
             this.y = this.y + newY;
-            int directionX = newX;
-            int directionY = newY;
         }
     }
 
@@ -44,12 +42,8 @@ public abstract class Client implements IClient
     public int getYLocation(){
         return this.y;
     }
-    public int getChanceOfGetting()
-    {
-        return this.ChanceOfGetting;
-    }
 
-    public int TryToGet(ArrayList<Product> products)
+    public int tryToGet(ArrayList<Product> products)
     {
         int index = -1;
         for(int i=0; i<60; i++)
@@ -61,12 +55,14 @@ public abstract class Client implements IClient
             }
         }
         return index;
+        // metoda zwraca indeks produktu, ktory klient moze zakupic, stojac na danym polu
+        // jesli nie ma takiego produktu - zwraca -1
     }
 
-    public boolean TryToBuy(Product product)
+    public boolean tryToBuy(Product product)
     {
         Random random = new Random();
-        if(random.nextInt(100) < this.getChanceOfGetting()){
+        if(random.nextInt(100) < this.chanceOfGetting){ // zmienna chanceOfGetting warunkuje prawdopodobienstwo podniesienia przedmiotu
             product.isSold();
             return true;
         } else {
@@ -79,7 +75,6 @@ public abstract class Client implements IClient
 interface IClient
 {
     void move();
-    int TryToGet(ArrayList<Product> products);
-    boolean TryToBuy(Product product);
+    int tryToGet(ArrayList<Product> products);
+    boolean tryToBuy(Product product);
 }
-
