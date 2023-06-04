@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
 
@@ -18,7 +17,7 @@ public class Simulation
         }
     }
 
-    public void runSimulation(int numberOfChild, int numberOfAdult, int numberOfElderly)
+    public void runSimulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         Random random = new Random();
 
@@ -67,10 +66,14 @@ public class Simulation
                 shop.clientLeaves(shop.getClient(i));
             }
         }
-        
+
         //zliczanie rezultatów symulacji
         System.out.println();
         System.out.println("\nPODSUMOWANIE SYMULACJI\n");
+        System.out.println("Ilość agentów typu Child: " + numberOfChild);
+        System.out.println("Ilość agentów typu Adult: " + numberOfAdult);
+        System.out.println("Ilość agentów typu Elderly: " + numberOfElderly);
+        System.out.println("Ilość wszystkich produktów promocyjnych: " + numberOfPromotional);
 
         int ArePromotionalSold = 0;
         for(Product product : shop.getProducts())
@@ -86,7 +89,7 @@ public class Simulation
         }
         else
         {
-            System.out.println("Na półkach zostało " + (60-ArePromotionalSold) + " produktów promocyjnych");
+            System.out.println("Ilość niesprzedanych produktów promocyjnych: " + (60-ArePromotionalSold));
         }
 
     }
@@ -94,12 +97,12 @@ public class Simulation
     public static void main(String[] args)
     {
         int numberOfPromotional = 60;
-        int numberOfChild = 3;
+        int numberOfChild = 2;
         int numberOfAdult = 3;
-        int numberOfElderly = 3;
+        int numberOfElderly = 1;
 
         Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-        simulation.runSimulation(numberOfChild, numberOfAdult, numberOfElderly);
+        simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
     }
 
 }
