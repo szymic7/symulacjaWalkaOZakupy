@@ -67,6 +67,27 @@ public class Simulation
                 shop.clientLeaves(shop.getClient(i));
             }
         }
+        
+        //zliczanie rezultatów symulacji
+        System.out.println();
+        System.out.println("\nPODSUMOWANIE SYMULACJI\n");
+
+        int ArePromotionalSold = 0;
+        for(Product product : shop.getProducts())
+        {
+            if(product.isPromotional()==false)
+            {
+                ArePromotionalSold++;
+            }
+        }
+        if(ArePromotionalSold==60)
+        {
+            System.out.println("Sprzedano wszystkie produkty promocyjne!!!");
+        }
+        else
+        {
+            System.out.println("Na półkach zostało " + (60-ArePromotionalSold) + " produktów promocyjnych");
+        }
 
     }
 
