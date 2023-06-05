@@ -121,7 +121,8 @@ public class Shop
 
         // swap random products for PromotionalProducts
         i=0;
-        do{
+        while(i<numberOfPromotional)
+        {
             random = new Random();
             int a = random.nextInt(60);
 
@@ -154,7 +155,7 @@ public class Shop
                 }
             }
 
-        }while(i<numberOfPromotional);
+        }
     }
 
     public Client getClient(int indexOfClient)
@@ -182,4 +183,5 @@ public class Shop
     }
 
 }
+
 
