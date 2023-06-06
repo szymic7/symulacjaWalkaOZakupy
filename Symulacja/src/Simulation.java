@@ -126,6 +126,9 @@ public class Simulation
 
         Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        
+        SwingWindow window = new SwingWindow();
+        window.show();
     }
 
 }
