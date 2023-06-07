@@ -21,7 +21,7 @@ public class SwingWindow
     private void initialize()
     {
         frame = new JFrame();
-        frame.setBounds(200, 200, 600, 500);
+        frame.setBounds(200, 200, 850, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -30,7 +30,7 @@ public class SwingWindow
         titleLabel.setBounds(210, 10, 200, 20);
         frame.getContentPane().add(titleLabel);
 
-        //child
+        //child slider
         JLabel childTitleLabel = new JLabel("ChildClient:");
         childTitleLabel.setBounds(20, 50, 80, 20);
         frame.getContentPane().add(childTitleLabel);
@@ -53,7 +53,7 @@ public class SwingWindow
 
         frame.getContentPane().add(childSlider);
 
-        //adult
+        //adult slider
         JLabel adultTitleLabel = new JLabel("AdultClient:");
         adultTitleLabel.setBounds(20, 90, 80, 20);
         frame.getContentPane().add(adultTitleLabel);
@@ -76,7 +76,7 @@ public class SwingWindow
 
         frame.getContentPane().add(adultSlider);
 
-        //elderly
+        //elderly slider
         JLabel elderlyTitleLabel = new JLabel("ElderlyClient:");
         elderlyTitleLabel.setBounds(20, 130, 80, 20);
         frame.getContentPane().add(elderlyTitleLabel);
