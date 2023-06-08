@@ -50,7 +50,7 @@ public class SwingWindow
         //nagłówek
         JLabel titleLabel = new JLabel("Symulacja zakupów");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-        titleLabel.setBounds(330, 10, 250, 25);
+        titleLabel.setBounds(320, 10, 250, 25);
         frame.getContentPane().add(titleLabel);
 
         //przyciski start/stop
