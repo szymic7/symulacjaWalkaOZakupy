@@ -40,15 +40,15 @@ public class SwingWindow
 
         //ustawienia mapy
         storePanel = new JPanel();
-        storePanel.setBounds(60,70,400,400);
+        storePanel.setBounds(60,65,400,400);
         storePanel.setBackground(Color.black);
 
         frame.add(storePanel);
 
         //nagłówek
         JLabel titleLabel = new JLabel("Symulacja zakupów");
-        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-        titleLabel.setBounds(330, 10, 200, 20);
+        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        titleLabel.setBounds(330, 10, 250, 25);
         frame.getContentPane().add(titleLabel);
 
         //promotional slider
