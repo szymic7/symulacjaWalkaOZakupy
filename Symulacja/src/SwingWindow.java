@@ -58,6 +58,7 @@ public class SwingWindow
         //poza tym za każdym razem jak symulacja się skończy to musi być
         //możliwość ponownego jej odplaenia z innymi parametrami wybranymi na suwakach
         //podsumowując nie wiem jak my to zrobimy
+        //więc ja nie wiem może to okno powinno być naszym mainem
         start = new JButton("START");
         start.setBackground(Color.GREEN);
         start.setBounds(520,90,120,40);
