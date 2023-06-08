@@ -19,6 +19,8 @@ public class SwingWindow
     private JLabel adultLabel;
     private JLabel elderlyLabel;
     private JPanel storePanel;
+    private JButton start;
+    private JButton stop;
 
     public SwingWindow(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
@@ -50,6 +52,23 @@ public class SwingWindow
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
         titleLabel.setBounds(330, 10, 250, 25);
         frame.getContentPane().add(titleLabel);
+
+        //przyciski start/stop
+        //ogólnie ci powiem że to pojebane bo te przyciski powinny startować i zatrzymywać symulację
+        //poza tym za każdym razem jak symulacja się skończy to musi być
+        //możliwość ponownego jej odplaenia z innymi parametrami wybranymi na suwakach
+        //podsumowując nie wiem jak my to zrobimy
+        start = new JButton("START");
+        start.setBackground(Color.GREEN);
+        start.setBounds(520,90,120,40);
+
+        frame.add(start);
+
+        stop = new JButton("STOP");
+        stop.setBackground(Color.red);
+        stop.setBounds(660,90,120,40);
+
+        frame.add(stop);
 
         //promotional slider
         JLabel promotionalTitleLabel = new JLabel("Promotional:");
