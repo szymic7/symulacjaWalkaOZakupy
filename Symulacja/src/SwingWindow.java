@@ -11,7 +11,7 @@ public class SwingWindow
     private JLabel childLabel;
     private JLabel adultLabel;
     private JLabel elderlyLabel;
-
+    private JPanel storePanel;
 
     public SwingWindow()
     {
@@ -25,24 +25,37 @@ public class SwingWindow
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
+        storePanel = new JPanel();
+        storePanel.setLayout(new GridLayout(4, 4)); // Zakładamy siatkę 4x4 półek
+
+        /* Tworzenie półek sklepowych
+        for (int i = 0; i < 16; i++) {
+            JPanel polka = new JPanel();
+            polka.setBackground(Color.WHITE);
+            polka.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            storePanel.add(polka);
+        }
+        */
+        frame.add(storePanel);
+
         JLabel titleLabel = new JLabel("Symulacja zakupów");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-        titleLabel.setBounds(210, 10, 200, 20);
+        titleLabel.setBounds(330, 10, 200, 20);
         frame.getContentPane().add(titleLabel);
 
         //child slider
         JLabel childTitleLabel = new JLabel("ChildClient:");
-        childTitleLabel.setBounds(20, 50, 80, 20);
+        childTitleLabel.setBounds(570, 185, 80, 20);
         frame.getContentPane().add(childTitleLabel);
 
         childLabel = new JLabel("0");
-        childLabel.setBounds(100, 50, 20, 20);
+        childLabel.setBounds(650, 185, 20, 20);
         frame.getContentPane().add(childLabel);
 
         childSlider = new JSlider();
         childSlider.setMinimum(0);
         childSlider.setMaximum(10);
-        childSlider.setBounds(120, 50, 150, 20);
+        childSlider.setBounds(670, 185, 150, 20);
         childSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e)
             {
@@ -55,17 +68,17 @@ public class SwingWindow
 
         //adult slider
         JLabel adultTitleLabel = new JLabel("AdultClient:");
-        adultTitleLabel.setBounds(20, 90, 80, 20);
+        adultTitleLabel.setBounds(570, 225, 80, 20);
         frame.getContentPane().add(adultTitleLabel);
 
         adultLabel = new JLabel("0");
-        adultLabel.setBounds(100, 90, 20, 20);
+        adultLabel.setBounds(650, 225, 20, 20);
         frame.getContentPane().add(adultLabel);
 
         adultSlider = new JSlider();
         adultSlider.setMinimum(0);
         adultSlider.setMaximum(10);
-        adultSlider.setBounds(120, 90, 150, 20);
+        adultSlider.setBounds(670, 225, 150, 20);
         adultSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e)
             {
@@ -78,17 +91,17 @@ public class SwingWindow
 
         //elderly slider
         JLabel elderlyTitleLabel = new JLabel("ElderlyClient:");
-        elderlyTitleLabel.setBounds(20, 130, 80, 20);
+        elderlyTitleLabel.setBounds(570, 265, 80, 20);
         frame.getContentPane().add(elderlyTitleLabel);
 
         elderlyLabel = new JLabel("0");
-        elderlyLabel.setBounds(100, 130, 20, 20);
+        elderlyLabel.setBounds(650, 265, 20, 20);
         frame.getContentPane().add(elderlyLabel);
 
         elderlySlider = new JSlider();
         elderlySlider.setMinimum(0);
         elderlySlider.setMaximum(10);
-        elderlySlider.setBounds(120, 130, 150, 20);
+        elderlySlider.setBounds(670, 265, 150, 20);
         elderlySlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e)
             {
