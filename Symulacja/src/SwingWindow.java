@@ -54,6 +54,10 @@ public class SwingWindow
         frame.getContentPane().add(titleLabel);
 
         //przyciski start/stop
+        //ogólnie ci powiem że to pojebane bo te przyciski powinny startować i zatrzymywać symulację
+        //poza tym za każdym razem jak symulacja się skończy to musi być
+        //możliwość ponownego jej odplaenia z innymi parametrami wybranymi na suwakach
+        //podsumowując nie wiem jak my to zrobimy
         start = new JButton("START");
         start.setBackground(Color.GREEN);
         start.setBounds(520,90,120,40);
