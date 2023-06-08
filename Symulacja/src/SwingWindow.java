@@ -26,8 +26,8 @@ public class SwingWindow
         frame.getContentPane().setLayout(null);
 
         storePanel = new JPanel();
-        storePanel.setBounds(40,80,200,200);
-        storePanel.setBackground(Color.gray);
+        storePanel.setBounds(40,80,480,360);
+        storePanel.setBackground(Color.black);
 
         frame.add(storePanel);
 
