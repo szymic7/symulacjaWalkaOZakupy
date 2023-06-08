@@ -60,6 +60,14 @@ public class SwingWindow
                 g.drawRect(60, 100, 40, 200);
                 g.drawRect(180, 100, 40, 200);
                 g.drawRect(300, 100, 40, 200);
+                
+                //rysowanie kasy
+                g.setColor(Color.BLACK);
+                g.fillRect(360, 360, 40, 40);
+
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Arial", Font.BOLD, 11));
+                g.drawString("KASA", 366, 381);
             }
         };
         storePanel.setBackground(Color.WHITE);
