@@ -50,16 +50,22 @@ public class SwingWindow
                 g.drawRect(0,0,getWidth()-1,getHeight()-1);
 
                 //półki w sklepie
-                g.setColor(Color.BLUE);
-                g.fillRect(100, 50, 20, 20);
-                g.fillRect(200, 50, 20, 20);
-                g.fillRect(300, 50, 20, 20);
+                g.setColor(Color.gray);
+                g.fillRect(60, 100, 40, 200);
+                g.fillRect(180, 100, 40, 200);
+                g.fillRect(300, 100, 40, 200);
+
+                //ramki wokół półek
+                g.setColor(Color.BLACK);
+                g.drawRect(60, 100, 40, 200);
+                g.drawRect(180, 100, 40, 200);
+                g.drawRect(300, 100, 40, 200);
             }
         };
         storePanel.setBackground(Color.WHITE);
         storePanel.setBounds(60,65,400,400);
         frame.getContentPane().add(storePanel);
-
+        
         //nagłówek
         JLabel titleLabel = new JLabel("Symulacja zakupów");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
