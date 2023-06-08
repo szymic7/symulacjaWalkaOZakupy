@@ -26,16 +26,9 @@ public class SwingWindow
         frame.getContentPane().setLayout(null);
 
         storePanel = new JPanel();
-        storePanel.setLayout(new GridLayout(4, 4)); // Zakładamy siatkę 4x4 półek
+        storePanel.setBounds(40,80,200,200);
+        storePanel.setBackground(Color.gray);
 
-        /* Tworzenie półek sklepowych
-        for (int i = 0; i < 16; i++) {
-            JPanel polka = new JPanel();
-            polka.setBackground(Color.WHITE);
-            polka.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            storePanel.add(polka);
-        }
-        */
         frame.add(storePanel);
 
         JLabel titleLabel = new JLabel("Symulacja zakupów");
