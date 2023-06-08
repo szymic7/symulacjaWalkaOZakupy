@@ -40,12 +40,25 @@ public class SwingWindow
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        //ustawienia mapy
-        storePanel = new JPanel();
-        storePanel.setBounds(60,65,400,400);
-        storePanel.setBackground(Color.black);
+        //rysowanie mapy
+        storePanel = new JPanel() {
+            protected void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
 
-        frame.add(storePanel);
+                g.setColor(Color.black);
+                g.drawRect(0,0,getWidth()-1,getHeight()-1);
+
+                //półki w sklepie
+                g.setColor(Color.BLUE);
+                g.fillRect(100, 50, 20, 20);
+                g.fillRect(200, 50, 20, 20);
+                g.fillRect(300, 50, 20, 20);
+            }
+        };
+        storePanel.setBackground(Color.WHITE);
+        storePanel.setBounds(60,65,400,400);
+        frame.getContentPane().add(storePanel);
 
         //nagłówek
         JLabel titleLabel = new JLabel("Symulacja zakupów");
