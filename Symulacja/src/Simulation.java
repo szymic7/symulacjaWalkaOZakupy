@@ -24,13 +24,6 @@ public class Simulation
     {
         Random random = new Random();
 
-        /* test listy produktów promocyjnych
-        for(Product product : shop.getProducts())
-        {
-            System.out.println(product.isPromotional());
-        }
-        */
-
         while (!shop.getClients().isEmpty())
         {
             for (int i=0; i<shop.getClients().size(); i++)
@@ -47,7 +40,7 @@ public class Simulation
                         if((clientsIndexes.get(shop.getClient(i))<numberOfChild && clientsIndexes.get(shop.getClient(j))>=numberOfChild) ||
                                 (clientsIndexes.get(shop.getClient(i))<(numberOfAdult+numberOfChild) && clientsIndexes.get(shop.getClient(j))>=(numberOfAdult+numberOfChild)))
                         // drugi warunek - (client i to ChildClient a client j to AdultClient albo ElderlyClient) lub
-                            // (klient i to ChildClient albo AdultClient a client j to ElderlyClient)
+                        // (klient i to ChildClient albo AdultClient a client j to ElderlyClient)
                         {
                             System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
                                     "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
@@ -98,7 +91,7 @@ public class Simulation
         System.out.println("Liczba klientow typu Child: " + numberOfChild);
         System.out.println("Liczba klientow typu Adult: " + numberOfAdult);
         System.out.println("Liczba klientow typu Elderly: " + numberOfElderly);
-        System.out.println("Liczba produktow promocyjnych na poczatku symulacji: " + numberOfPromotional);
+        System.out.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
 
         // zliczenie, ile zostalo promocyjnych produktow
         int promotionalLeft = 0;
@@ -111,24 +104,28 @@ public class Simulation
         }
 
         System.out.println("Liczba sprzedanych produktow promocyjnych: " + (numberOfPromotional-promotionalLeft));
-        System.out.println("Produkty kupione przez klientow typu Child: " + boughtByChild);
-        System.out.println("Produkty kupione przez klientow typu Adult: " + boughtByAdult);
-        System.out.println("Produkty kupione przez klientow typu Elderly: " + boughtByElderly);
+        System.out.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
+        System.out.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
+        System.out.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly);
 
     }
 
     public static void main(String[] args)
     {
-        int numberOfPromotional = 40;
-        int numberOfChild = 2;
-        int numberOfAdult = 1;
+        int numberOfPromotional = 45;
+        int numberOfChild = 3;
+        int numberOfAdult = 3;
         int numberOfElderly = 3;
 
         Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-        
-        SwingWindow window = new SwingWindow();
+
+        SwingWindow window = new SwingWindow(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         window.show();
     }
 
 }
+
+
+
+
