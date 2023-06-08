@@ -112,16 +112,16 @@ public class Simulation
 
     public static void main(String[] args)
     {
-        int numberOfPromotional = 45;
-        int numberOfChild = 3;
-        int numberOfAdult = 3;
+        int numberOfPromotional = 30;
+        int numberOfChild = 4;
+        int numberOfAdult = 2;
         int numberOfElderly = 3;
-
-        Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-        simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
 
         SwingWindow window = new SwingWindow(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         window.show();
+
+        Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
     }
 
 }
