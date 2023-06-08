@@ -40,7 +40,7 @@ public class SwingWindow
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        //rysowanie mapy
+         //rysowanie mapy
         storePanel = new JPanel() {
             protected void paintComponent(Graphics g)
             {
@@ -60,7 +60,7 @@ public class SwingWindow
                 g.drawRect(60, 100, 40, 200);
                 g.drawRect(180, 100, 40, 200);
                 g.drawRect(300, 100, 40, 200);
-                
+
                 //rysowanie kasy
                 g.setColor(Color.BLACK);
                 g.fillRect(360, 360, 40, 40);
