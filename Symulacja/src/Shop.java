@@ -29,7 +29,8 @@ public class Shop
 
         // create & spawn ChildClient
         int i=0;
-        while(i<numberOfChild){
+        while(i<numberOfChild)
+        {
             int x = random.nextInt(MapSize);
             int y = random.nextInt(5);
 
@@ -62,7 +63,8 @@ public class Shop
         }
 
         // create & spawn AdultClient
-        while(i<(numberOfAdult+numberOfChild)){
+        while(i<(numberOfAdult+numberOfChild))
+        {
             int x = random.nextInt(MapSize);
             int y = random.nextInt(5);
             int check = 0;
@@ -86,7 +88,8 @@ public class Shop
         }
 
         // create & spawn ElderlyClient
-        while(i<(allClients)){
+        while(i<(allClients))
+        {
             int x = random.nextInt(MapSize);
             int y = random.nextInt(5);
             int check=0;
@@ -183,5 +186,4 @@ public class Shop
     }
 
 }
-
 
