@@ -29,6 +29,7 @@ public class Simulation
 
         while (!shop.getClients().isEmpty())
         {
+            window.show();
             for (int i=0; i<shop.getClients().size(); i++)
             {
 
@@ -87,7 +88,6 @@ public class Simulation
                     shop.clientLeaves(shop.getClient(i));
                 }
             }
-            window.show();
         }
 
         // zliczanie rezultatow symulacji
