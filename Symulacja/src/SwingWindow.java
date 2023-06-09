@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.event.*;
 
-public class SwingWindow
+public class SwingWindow extends JPanel
 {
-    private Shop shop;
+    public Shop shop;
     private int numberOfPromotional;
     private int numberOfChild;
     private int numberOfAdult;
@@ -22,6 +22,8 @@ public class SwingWindow
     private JPanel storePanel;
     private JButton start;
     private JButton stop;
+    private static final Color dark_green = new Color(0,215,0);
+    private static final Color dark_red = new Color(215,0,0);
 
     public SwingWindow(Shop shop, int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
@@ -34,11 +36,11 @@ public class SwingWindow
         initialize();
     }
 
-    private void initialize()
+    public void initialize()
     {
         //ustawienia okna
         frame = new JFrame();
-        frame.setBounds(200, 200, 850, 550);
+        frame.setBounds(200, 100, 850, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -72,31 +74,26 @@ public class SwingWindow
                 g.drawString("KASA", 366, 381);
 
                 //rysowanie klientów
-                //ci klienci źle się rysują
-                //w sensie w złych miejscach
-                //x i y gdzieś jest pojeabny ale nie wiem gdzie i jak
-                //bo jestem kurwa zmęczony
-                //może to jest problem  z umijescowieniem window.show() w klasie Simulation
                 for (Client client : shop.getClients())
                 {
                     int x = client.getXLocation();
                     int y = client.getYLocation();
                     int clientX = x*20;
                     int clientY = y*20;
-                    
-                    if (client instanceof ChildClient) 
+
+                    if (client instanceof ChildClient)
                     {
-                        g.setColor(Color.RED);
-                    } 
-                    else if (client instanceof AdultClient) 
+                        g.setColor(dark_red);
+                    }
+                    else if (client instanceof AdultClient)
                     {
                         g.setColor(Color.BLUE);
-                    } 
-                    else if (client instanceof ElderlyClient) 
-                    {
-                        g.setColor(Color.GREEN);
                     }
-                    
+                    else if (client instanceof ElderlyClient)
+                    {
+                        g.setColor(dark_green);
+                    }
+
                     g.fillOval(clientX, clientY, 20, 20);
                     g.setColor(Color.BLACK);
                     g.drawOval(clientX, clientY, 20, 20);
@@ -148,19 +145,21 @@ public class SwingWindow
         frame.getContentPane().add(titleLabel);
 
         //przyciski start/stop
-        //ogólnie ci powiem że to pojebane bo te przyciski powinny startować i zatrzymywać symulację
-        //poza tym za każdym razem jak symulacja się skończy to musi być
-        //możliwość ponownego jej odplaenia z innymi parametrami wybranymi na suwakach
-        //podsumowując nie wiem jak my to zrobimy
         start = new JButton("START");
-        start.setBackground(Color.GREEN);
+        start.setBackground(dark_green);
         start.setBounds(520,90,120,40);
+        start.addActionListener(e -> {
+            Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+            simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        });
+        //mainPanel.add(startButton);
 
         frame.add(start);
 
         stop = new JButton("STOP");
-        stop.setBackground(Color.red);
+        stop.setBackground(dark_red);
         stop.setBounds(660,90,120,40);
+        //stop.addActionListener(e -> { });
 
         frame.add(stop);
 
@@ -182,8 +181,9 @@ public class SwingWindow
         promotionalSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e)
             {
-                int value = promotionalSlider.getValue();
-                promotionalLabel.setText(String.valueOf(value));
+                //int value = promotionalSlider.getValue();
+                //promotionalLabel.setText(String.valueOf(value));
+                numberOfPromotional = promotionalSlider.getValue();
             }
         });
 
@@ -209,6 +209,7 @@ public class SwingWindow
             {
                 int value = childSlider.getValue();
                 childLabel.setText(String.valueOf(value));
+                //numberOfChild = childSlider.getValue();
             }
         });
 
@@ -234,6 +235,7 @@ public class SwingWindow
             {
                 int value = adultSlider.getValue();
                 adultLabel.setText(String.valueOf(value));
+                //numberOfAdult = adultSlider.getValue();
             }
         });
 
@@ -259,11 +261,66 @@ public class SwingWindow
             {
                 int value = elderlySlider.getValue();
                 elderlyLabel.setText(String.valueOf(value));
+                //numberOfElderly = elderlySlider.getValue();
             }
         });
 
         frame.getContentPane().add(elderlySlider);
 
+    }
+    /*public void updateMap(){
+
+        //frame.repaint();
+
+        for (Client client : shop.getClients()) {
+            int x = client.getXLocation();
+            int y = client.getYLocation();
+            int clientX = x * 20;
+            int clientY = y * 20;
+
+            if (client instanceof ChildClient) {
+                storePanel.getGraphics().setColor(dark_red);
+            } else if (client instanceof AdultClient) {
+                storePanel.getGraphics().setColor(Color.BLUE);
+            } else if (client instanceof ElderlyClient) {
+                storePanel.getGraphics().setColor(dark_green);
+            }
+            storePanel.getGraphics().setColor(Color.WHITE);
+            storePanel.getGraphics().fillOval(clientX, clientY, 20, 20);
+            storePanel.getGraphics().setColor(Color.BLACK);
+            storePanel.getGraphics().drawOval(clientX, clientY, 20, 20);
+        }
+
+        //rysowanie produktów
+        int i = 1;
+        for (Product product : shop.getProducts()) {
+            int x = product.getX();
+            int y = product.getY();
+            int productX;
+            int productY = y * 20;
+
+            if (i % 2 == 1) {
+                productX = (x + 1) * 20;
+            } else {
+                productX = (x - 1) * 20;
+            }
+
+            if (product.isPromotional()) {
+                storePanel.getGraphics().setColor(Color.YELLOW);
+            } else {
+                storePanel.getGraphics().setColor(Color.GRAY);
+            }
+
+            storePanel.getGraphics().fillRect(productX, productY, 20, 20);
+            storePanel.getGraphics().setColor(Color.BLACK);
+            storePanel.getGraphics().drawRect(productX, productY, 20, 20);
+
+            i++;
+        }
+    }*/
+
+    public JPanel getStorePanel(){
+        return storePanel;
     }
 
     public void show()
@@ -272,4 +329,3 @@ public class SwingWindow
     }
 
 }
-
