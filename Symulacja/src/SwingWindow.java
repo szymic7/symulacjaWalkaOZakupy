@@ -4,6 +4,7 @@ import javax.swing.event.*;
 
 public class SwingWindow
 {
+    private Shop shop;
     private int numberOfPromotional;
     private int numberOfChild;
     private int numberOfAdult;
@@ -22,8 +23,9 @@ public class SwingWindow
     private JButton start;
     private JButton stop;
 
-    public SwingWindow(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
+    public SwingWindow(Shop shop, int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
+        this.shop = shop;
         this.numberOfPromotional = numberOfPromotional;
         this.numberOfChild = numberOfChild;
         this.numberOfAdult = numberOfAdult;
@@ -40,7 +42,7 @@ public class SwingWindow
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-         //rysowanie mapy
+        //rysowanie mapy
         storePanel = new JPanel() {
             protected void paintComponent(Graphics g)
             {
@@ -68,12 +70,47 @@ public class SwingWindow
                 g.setColor(Color.WHITE);
                 g.setFont(new Font("Arial", Font.BOLD, 11));
                 g.drawString("KASA", 366, 381);
+
+                //rysowanie klientów
+                for (Client client : shop.getClients())
+                {
+                    int x = client.getXLocation();
+                    int y = client.getYLocation();
+                    int clientX = x*20;
+                    int clientY = y*20;
+                    if (client instanceof ChildClient) {
+                        g.setColor(Color.RED);
+                    } else if (client instanceof AdultClient) {
+                        g.setColor(Color.BLUE);
+                    } else if (client instanceof ElderlyClient) {
+                        g.setColor(Color.GREEN);
+                    }
+                    g.fillOval(clientX, clientY, 20, 20);
+                    g.setColor(Color.BLACK);
+                    g.drawOval(clientX, clientY, 20, 20);
+                }
+
+                //rysowanie produktów
+                for (Product product : shop.getProducts()) {
+                    int x = product.getX();
+                    int y = product.getY();
+                    int productX = x*20;
+                    int productY = y*20;
+                    if (product.isPromotional()) {
+                        g.setColor(Color.YELLOW);
+                    } else {
+                        g.setColor(Color.GRAY);
+                    }
+                    g.fillRect(productX, productY, 20, 20);
+                    g.setColor(Color.BLACK);
+                    g.drawRect(productX, productY, 20, 20);
+                }
             }
         };
         storePanel.setBackground(Color.WHITE);
         storePanel.setBounds(60,65,400,400);
         frame.getContentPane().add(storePanel);
-        
+
         //nagłówek
         JLabel titleLabel = new JLabel("Symulacja zakupów");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -81,11 +118,6 @@ public class SwingWindow
         frame.getContentPane().add(titleLabel);
 
         //przyciski start/stop
-        //ogólnie ci powiem że to pojebane bo te przyciski powinny startować i zatrzymywać symulację
-        //poza tym za każdym razem jak symulacja się skończy to musi być
-        //możliwość ponownego jej odplaenia z innymi parametrami wybranymi na suwakach
-        //podsumowując nie wiem jak my to zrobimy
-        //więc ja nie wiem może to okno powinno być naszym mainem
         start = new JButton("START");
         start.setBackground(Color.GREEN);
         start.setBounds(520,90,120,40);
@@ -197,6 +229,7 @@ public class SwingWindow
         });
 
         frame.getContentPane().add(elderlySlider);
+
     }
 
     public void show()
