@@ -31,7 +31,7 @@ public class Shop
         int i=0;
         while(i<numberOfChild){
             int x = random.nextInt(MapSize);
-            int y = random.nextInt(4);
+            int y = random.nextInt(5);
 
             if(i==0)
             {
@@ -64,7 +64,7 @@ public class Shop
         // create & spawn AdultClient
         while(i<(numberOfAdult+numberOfChild)){
             int x = random.nextInt(MapSize);
-            int y = random.nextInt(4);
+            int y = random.nextInt(5);
             int check = 0;
 
             for(int j=0; j<i; j++)
