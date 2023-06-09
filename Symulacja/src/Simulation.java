@@ -53,7 +53,6 @@ public class Simulation
                 if(interactions==0)
                 {
                     shop.getClient(i).move(); // ruch klienta
-                    System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") x = " + shop.getClient(i).getXLocation() + ", y = " + shop.getClient(i).getYLocation());
 
                     // sprawdzenie, czy stojac na danym polu klient moze wejsc w interakcje z produktem promocyjnym
                     if ((shop.getClient(i).tryToGet(shop.getProducts())) > -1)
