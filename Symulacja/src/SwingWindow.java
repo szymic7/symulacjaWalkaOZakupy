@@ -72,6 +72,10 @@ public class SwingWindow
                 g.drawString("KASA", 366, 381);
 
                 //rysowanie klientów
+                //ci klienci źle się rysują
+                //w sensie w złych miejscach
+                //x i y gdzieś jest pojeabny ale nie wiem gdzie i jak
+                //bo jestem kurwa zmęczony
                 for (Client client : shop.getClients())
                 {
                     int x = client.getXLocation();
@@ -91,6 +95,8 @@ public class SwingWindow
                 }
 
                 //rysowanie produktów
+                //to nie działa tak jak chcemy jeszcze bo są pokazane są te pola promocyjne
+                //z których klienci mogą kupić produkt a powinny się pojawiać te produkty na tych półkach szarych
                 for (Product product : shop.getProducts()) {
                     int x = product.getX();
                     int y = product.getY();
