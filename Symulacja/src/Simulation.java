@@ -45,6 +45,8 @@ public class Simulation
                         // drugi warunek - (client i to ChildClient a client j to AdultClient albo ElderlyClient) lub
                         // (klient i to ChildClient albo AdultClient a client j to ElderlyClient)
                         {
+                            System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
+                                    "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
                             interactions++;
                         }
                     }
@@ -53,6 +55,7 @@ public class Simulation
                 if(interactions==0)
                 {
                     shop.getClient(i).move(); // ruch klienta
+                    System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") x = " + shop.getClient(i).getXLocation() + ", y = " + shop.getClient(i).getYLocation());
 
                     // sprawdzenie, czy stojac na danym polu klient moze wejsc w interakcje z produktem promocyjnym
                     if ((shop.getClient(i).tryToGet(shop.getProducts())) > -1)
@@ -60,6 +63,7 @@ public class Simulation
                         // sprawdzenie, czy klient jest w stanie "dosiegnac"/"dostrzec" produkt i podniesc go
                         if (shop.getClient(i).tryToBuy(shop.getProducts().get(shop.getClient(i).tryToGet(shop.getProducts()))))
                         {
+                            System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") zakupil produkt promocyjny.");
                             if (clientsIndexes.get(shop.getClient(i)) < numberOfChild)
                             {
                                 boughtByChild++;
@@ -72,6 +76,10 @@ public class Simulation
                             {
                                 boughtByElderly++;
                             }
+                        }
+                        else
+                        {
+                            System.out.println("Klientowi(" + clientsIndexes.get(shop.getClient(i)) + ") nie udalo sie zakupic produktu promocyjnego.");
                         }
                     }
 
