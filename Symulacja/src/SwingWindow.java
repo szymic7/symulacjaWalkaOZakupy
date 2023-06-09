@@ -103,13 +103,22 @@ public class SwingWindow
                 }
 
                 //rysowanie produktów
-                //to nie działa tak jak chcemy jeszcze bo są pokazane są te pola promocyjne
-                //z których klienci mogą kupić produkt a powinny się pojawiać te produkty na tych półkach szarych
-                for (Product product : shop.getProducts()) {
+                int i=1;
+                for (Product product : shop.getProducts())
+                {
                     int x = product.getX();
                     int y = product.getY();
-                    int productX = x*20;
+                    int productX;
                     int productY = y*20;
+
+                    if(i%2==1)
+                    {
+                        productX = (x+1) * 20;
+                    }
+                    else
+                    {
+                        productX = (x-1) * 20;
+                    }
 
                     if (product.isPromotional())
                     {
@@ -123,6 +132,8 @@ public class SwingWindow
                     g.fillRect(productX, productY, 20, 20);
                     g.setColor(Color.BLACK);
                     g.drawRect(productX, productY, 20, 20);
+
+                    i++;
                 }
             }
         };
