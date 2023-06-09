@@ -5,6 +5,8 @@ public class Simulation
 {
     private Shop shop;
     private HashMap<Client, Integer> clientsIndexes;
+    private SwingWindow window;
+
     private static int boughtByChild = 0;
     private static int boughtByAdult = 0;
     private static int boughtByElderly = 0;
@@ -13,6 +15,7 @@ public class Simulation
     {
         this.shop = new Shop(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         this.clientsIndexes = new HashMap<>();
+        this.window = new SwingWindow(shop, numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
 
         for(int i=0; i<shop.getClients().size(); i++)
         {
@@ -42,8 +45,6 @@ public class Simulation
                         // drugi warunek - (client i to ChildClient a client j to AdultClient albo ElderlyClient) lub
                         // (klient i to ChildClient albo AdultClient a client j to ElderlyClient)
                         {
-                            System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
-                                    "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
                             interactions++;
                         }
                     }
@@ -60,7 +61,6 @@ public class Simulation
                         // sprawdzenie, czy klient jest w stanie "dosiegnac"/"dostrzec" produkt i podniesc go
                         if (shop.getClient(i).tryToBuy(shop.getProducts().get(shop.getClient(i).tryToGet(shop.getProducts()))))
                         {
-                            System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") zakupil produkt promocyjny.");
                             if (clientsIndexes.get(shop.getClient(i)) < numberOfChild)
                             {
                                 boughtByChild++;
@@ -74,20 +74,17 @@ public class Simulation
                                 boughtByElderly++;
                             }
                         }
-                        else
-                        {
-                            System.out.println("Klientowi(" + clientsIndexes.get(shop.getClient(i)) + ") nie udalo sie zakupic produktu promocyjnego.");
-                        }
                     }
 
                     // sprawdzenie, czy klient trafil do kasy
                     shop.clientLeaves(shop.getClient(i));
                 }
             }
+            window.show();
         }
 
         // zliczanie rezultatow symulacji
-        System.out.println("\n\nWYNIKI SYMULACJI\n");
+        System.out.println("\nWYNIKI SYMULACJI\n");
         System.out.println("Liczba klientow typu Child: " + numberOfChild);
         System.out.println("Liczba klientow typu Adult: " + numberOfAdult);
         System.out.println("Liczba klientow typu Elderly: " + numberOfElderly);
@@ -116,9 +113,6 @@ public class Simulation
         int numberOfChild = 4;
         int numberOfAdult = 2;
         int numberOfElderly = 3;
-
-        SwingWindow window = new SwingWindow(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-        window.show();
 
         Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
