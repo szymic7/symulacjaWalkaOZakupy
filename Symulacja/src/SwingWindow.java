@@ -76,6 +76,7 @@ public class SwingWindow
                 //w sensie w złych miejscach
                 //x i y gdzieś jest pojeabny ale nie wiem gdzie i jak
                 //bo jestem kurwa zmęczony
+                //może to jest problem  z umijescowieniem window.show() w klasie Simulation
                 for (Client client : shop.getClients())
                 {
                     int x = client.getXLocation();
