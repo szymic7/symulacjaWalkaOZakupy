@@ -82,13 +82,20 @@ public class SwingWindow
                     int y = client.getYLocation();
                     int clientX = x*20;
                     int clientY = y*20;
-                    if (client instanceof ChildClient) {
+                    
+                    if (client instanceof ChildClient) 
+                    {
                         g.setColor(Color.RED);
-                    } else if (client instanceof AdultClient) {
+                    } 
+                    else if (client instanceof AdultClient) 
+                    {
                         g.setColor(Color.BLUE);
-                    } else if (client instanceof ElderlyClient) {
+                    } 
+                    else if (client instanceof ElderlyClient) 
+                    {
                         g.setColor(Color.GREEN);
                     }
+                    
                     g.fillOval(clientX, clientY, 20, 20);
                     g.setColor(Color.BLACK);
                     g.drawOval(clientX, clientY, 20, 20);
@@ -102,11 +109,16 @@ public class SwingWindow
                     int y = product.getY();
                     int productX = x*20;
                     int productY = y*20;
-                    if (product.isPromotional()) {
+
+                    if (product.isPromotional())
+                    {
                         g.setColor(Color.YELLOW);
-                    } else {
+                    }
+                    else
+                    {
                         g.setColor(Color.GRAY);
                     }
+
                     g.fillRect(productX, productY, 20, 20);
                     g.setColor(Color.BLACK);
                     g.drawRect(productX, productY, 20, 20);
