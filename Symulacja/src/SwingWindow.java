@@ -72,10 +72,10 @@ public class SwingWindow
                 g.drawString("KASA", 366, 381);
 
                 //rysowanie klientów
-                //ci klienci źle się rysują
-                //w sensie w złych miejscach
-                //x i y gdzieś jest pojeabny ale nie wiem gdzie i jak
-                //bo jestem kurwa zmęczony
+                //ci klienci chyba działają
+                //ale nie ma pewności
+                //bo to ma rysowac ich spawn
+                //a my printujemy już po move wykonanym współrzędne
                 for (Client client : shop.getClients())
                 {
                     int x = client.getXLocation();
