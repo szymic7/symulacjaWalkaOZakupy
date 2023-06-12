@@ -50,7 +50,7 @@ public abstract class Client implements IClient
         {
             if(this.x == products.get(i).getX() && this.y == products.get(i).getY())
             {
-                if(products.get(i).isPromotional()==true)
+                if(products.get(i).isPromotional()==true && products.get(i).ifSold()==false)
                     index = i;
             }
         }
