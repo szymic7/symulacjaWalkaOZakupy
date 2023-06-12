@@ -24,6 +24,7 @@ public class SwingWindow extends JPanel
     private JButton stop;
     private static final Color dark_green = new Color(0,215,0);
     private static final Color dark_red = new Color(215,0,0);
+    private static final Color brown = new Color(150,75,0);
 
     public SwingWindow(Shop shop, int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
@@ -117,11 +118,15 @@ public class SwingWindow extends JPanel
                         productX = (x-1) * 20;
                     }
 
-                    if (product.isPromotional())
+                    if (product.isPromotional() && !product.ifSold())
                     {
                         g.setColor(Color.YELLOW);
                     }
-                    else
+                    else if (!product.isPromotional())
+                    {
+                        g.setColor(brown);
+                    }
+                    else if (product.ifSold())
                     {
                         g.setColor(Color.GRAY);
                     }
@@ -129,6 +134,13 @@ public class SwingWindow extends JPanel
                     g.fillRect(productX, productY, 20, 20);
                     g.setColor(Color.BLACK);
                     g.drawRect(productX, productY, 20, 20);
+
+                    // rysowanie znakow % na produktach promocyjnych
+                    if (product.isPromotional() && !product.ifSold()){
+                        g.setColor(Color.BLACK);
+                        g.setFont(new Font("Calibri", Font.BOLD, 17));
+                        g.drawString("%", productX+4, productY+16);
+                    }
 
                     i++;
                 }
@@ -152,14 +164,15 @@ public class SwingWindow extends JPanel
             Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
             simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         });
-        //mainPanel.add(startButton);
 
         frame.add(start);
 
         stop = new JButton("STOP");
         stop.setBackground(dark_red);
         stop.setBounds(660,90,120,40);
-        //stop.addActionListener(e -> { });
+        stop.addActionListener(e -> {
+            frame.repaint();
+        });
 
         frame.add(stop);
 
@@ -181,9 +194,9 @@ public class SwingWindow extends JPanel
         promotionalSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e)
             {
-                //int value = promotionalSlider.getValue();
-                //promotionalLabel.setText(String.valueOf(value));
-                numberOfPromotional = promotionalSlider.getValue();
+                int value = promotionalSlider.getValue();
+                promotionalLabel.setText(String.valueOf(value));
+                //numberOfPromotional = promotionalSlider.getValue();
             }
         });
 
@@ -268,56 +281,6 @@ public class SwingWindow extends JPanel
         frame.getContentPane().add(elderlySlider);
 
     }
-    /*public void updateMap(){
-
-        //frame.repaint();
-
-        for (Client client : shop.getClients()) {
-            int x = client.getXLocation();
-            int y = client.getYLocation();
-            int clientX = x * 20;
-            int clientY = y * 20;
-
-            if (client instanceof ChildClient) {
-                storePanel.getGraphics().setColor(dark_red);
-            } else if (client instanceof AdultClient) {
-                storePanel.getGraphics().setColor(Color.BLUE);
-            } else if (client instanceof ElderlyClient) {
-                storePanel.getGraphics().setColor(dark_green);
-            }
-            storePanel.getGraphics().setColor(Color.WHITE);
-            storePanel.getGraphics().fillOval(clientX, clientY, 20, 20);
-            storePanel.getGraphics().setColor(Color.BLACK);
-            storePanel.getGraphics().drawOval(clientX, clientY, 20, 20);
-        }
-
-        //rysowanie produktów
-        int i = 1;
-        for (Product product : shop.getProducts()) {
-            int x = product.getX();
-            int y = product.getY();
-            int productX;
-            int productY = y * 20;
-
-            if (i % 2 == 1) {
-                productX = (x + 1) * 20;
-            } else {
-                productX = (x - 1) * 20;
-            }
-
-            if (product.isPromotional()) {
-                storePanel.getGraphics().setColor(Color.YELLOW);
-            } else {
-                storePanel.getGraphics().setColor(Color.GRAY);
-            }
-
-            storePanel.getGraphics().fillRect(productX, productY, 20, 20);
-            storePanel.getGraphics().setColor(Color.BLACK);
-            storePanel.getGraphics().drawRect(productX, productY, 20, 20);
-
-            i++;
-        }
-    }*/
 
     public JPanel getStorePanel(){
         return storePanel;
