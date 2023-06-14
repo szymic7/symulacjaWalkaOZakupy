@@ -1,3 +1,6 @@
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -6,21 +9,36 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
 public class Simulation
 {
     private Shop shop;
     private HashMap<Client, Integer> clientsIndexes;
-    private SwingWindow window;
 
     private static int boughtByChild = 0;
     private static int boughtByAdult = 0;
     private static int boughtByElderly = 0;
 
+    private JFrame frame;
+    private JSlider promotionalSlider;
+    private JSlider childSlider;
+    private JSlider adultSlider;
+    private JSlider elderlySlider;
+    private JLabel promotionalLabel;
+    private JLabel childLabel;
+    private JLabel adultLabel;
+    private JLabel elderlyLabel;
+    private JPanel storePanel;
+    private JButton start;
+    private static final Color dark_green = new Color(0,215,0);
+    private static final Color dark_red = new Color(215,0,0);
+    private static final Color brown = new Color(150,75,0);
+
     public Simulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         this.shop = new Shop(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         this.clientsIndexes = new HashMap<>();
-        this.window = new SwingWindow(shop, numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        initialize(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
 
         for(int i=0; i<shop.getClients().size(); i++)
         {
@@ -28,16 +46,266 @@ public class Simulation
         }
     }
 
+    public void initialize(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
+    {
+        //ustawienia okna
+        frame = new JFrame();
+        frame.setBounds(200, 100, 850, 550);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        //rysowanie mapy
+        storePanel = new JPanel() {
+            protected void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
+
+                g.setColor(Color.black);
+                g.drawRect(0,0,getWidth()-1,getHeight()-1);
+
+                //półki w sklepie
+                g.setColor(Color.gray);
+                g.fillRect(60, 100, 40, 200);
+                g.fillRect(180, 100, 40, 200);
+                g.fillRect(300, 100, 40, 200);
+
+                //ramki wokół półek
+                g.setColor(Color.BLACK);
+                g.drawRect(60, 100, 40, 200);
+                g.drawRect(180, 100, 40, 200);
+                g.drawRect(300, 100, 40, 200);
+
+                //rysowanie kasy
+                g.setColor(Color.BLACK);
+                g.fillRect(360, 360, 40, 40);
+
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Arial", Font.BOLD, 11));
+                g.drawString("KASA", 366, 381);
+
+                //rysowanie klientów
+                for (Client client : shop.getClients())
+                {
+                    int x = client.getXLocation();
+                    int y = client.getYLocation();
+                    int clientX = x*20;
+                    int clientY = y*20;
+
+                    if (client instanceof ChildClient)
+                    {
+                        g.setColor(dark_red);
+                    }
+                    else if (client instanceof AdultClient)
+                    {
+                        g.setColor(Color.BLUE);
+                    }
+                    else if (client instanceof ElderlyClient)
+                    {
+                        g.setColor(dark_green);
+                    }
+
+                    g.fillOval(clientX, clientY, 20, 20);
+                    g.setColor(Color.BLACK);
+                    g.drawOval(clientX, clientY, 20, 20);
+                }
+
+                //rysowanie produktów
+                int i=1;
+                for (Product product : shop.getProducts())
+                {
+                    int x = product.getX();
+                    int y = product.getY();
+                    int productX;
+                    int productY = y*20;
+
+                    if(i%2==1)
+                    {
+                        productX = (x+1) * 20;
+                    }
+                    else
+                    {
+                        productX = (x-1) * 20;
+                    }
+
+                    if (product.isPromotional() && !product.ifSold())
+                    {
+                        g.setColor(Color.YELLOW);
+                    }
+                    else if (!product.isPromotional())
+                    {
+                        g.setColor(brown);
+                    }
+                    else if (product.ifSold())
+                    {
+                        g.setColor(Color.GRAY);
+                    }
+
+                    g.fillRect(productX, productY, 20, 20);
+                    g.setColor(Color.BLACK);
+                    g.drawRect(productX, productY, 20, 20);
+
+                    // rysowanie znakow % na produktach promocyjnych
+                    if (product.isPromotional() && !product.ifSold()){
+                        g.setColor(Color.BLACK);
+                        g.setFont(new Font("Calibri", Font.BOLD, 17));
+                        g.drawString("%", productX+4, productY+16);
+                    }
+
+                    i++;
+                }
+            }
+        };
+        storePanel.setBackground(Color.WHITE);
+        storePanel.setBounds(60,65,400,400);
+        frame.getContentPane().add(storePanel);
+
+        //nagłówek
+        JLabel titleLabel = new JLabel("Symulacja zakupów");
+        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        titleLabel.setBounds(320, 10, 250, 25);
+        frame.getContentPane().add(titleLabel);
+
+        //przyciski start/stop
+        start = new JButton("START");
+        start.setBackground(dark_green);
+        start.setBounds(580,90,130,40);
+        start.addActionListener(e -> {
+
+            resetSimulation();
+            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                protected Void doInBackground() {
+                    runSimulation(promotionalSlider.getValue(), childSlider.getValue(), adultSlider.getValue(), elderlySlider.getValue());
+                    return null;
+                }
+
+                protected void done() {
+                    storePanel.repaint();
+                }
+            };
+            worker.execute();
+        });
+
+        frame.add(start);
+
+        //promotional slider
+        JLabel promotionalTitleLabel = new JLabel("Promotional:");
+        promotionalTitleLabel.setBounds(500, 155, 80, 25);
+        frame.getContentPane().add(promotionalTitleLabel);
+
+        promotionalLabel = new JLabel(String.valueOf(numberOfPromotional));
+        promotionalLabel.setBounds(590, 155, 20, 25);
+        frame.getContentPane().add(promotionalLabel);
+
+        promotionalSlider = new JSlider(JSlider.HORIZONTAL, 0,60, numberOfPromotional);
+        promotionalSlider.setMinorTickSpacing(5);
+        promotionalSlider.setMajorTickSpacing(20);
+        promotionalSlider.setPaintTicks(true);
+        promotionalSlider.setPaintLabels(true);
+        promotionalSlider.setBounds(610, 155, 190, 50);
+        promotionalSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                int value = promotionalSlider.getValue();
+                promotionalLabel.setText(String.valueOf(value));
+            }
+        });
+
+        frame.getContentPane().add(promotionalSlider);
+
+        //child slider
+        JLabel childTitleLabel = new JLabel("ChildClient:");
+        childTitleLabel.setBounds(510, 210, 80, 25);
+        frame.getContentPane().add(childTitleLabel);
+
+        childLabel = new JLabel(String.valueOf(numberOfChild));
+        childLabel.setBounds(590, 210, 20, 25);
+        frame.getContentPane().add(childLabel);
+
+        childSlider = new JSlider(JSlider.HORIZONTAL, 0,6, numberOfChild);
+        childSlider.setMinorTickSpacing(1);
+        childSlider.setMajorTickSpacing(2);
+        childSlider.setPaintTicks(true);
+        childSlider.setPaintLabels(true);
+        childSlider.setBounds(610, 210, 180, 50);
+        childSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e)
+            {
+                int value = childSlider.getValue();
+                childLabel.setText(String.valueOf(value));
+            }
+        });
+
+        frame.getContentPane().add(childSlider);
+
+        //adult slider
+        JLabel adultTitleLabel = new JLabel("AdultClient:");
+        adultTitleLabel.setBounds(510, 265, 80, 25);
+        frame.getContentPane().add(adultTitleLabel);
+
+        adultLabel = new JLabel(String.valueOf(numberOfAdult));
+        adultLabel.setBounds(590, 265, 20, 25);
+        frame.getContentPane().add(adultLabel);
+
+        adultSlider = new JSlider(JSlider.HORIZONTAL, 0,6, numberOfAdult);
+        adultSlider.setMinorTickSpacing(1);
+        adultSlider.setMajorTickSpacing(2);
+        adultSlider.setPaintTicks(true);
+        adultSlider.setPaintLabels(true);
+        adultSlider.setBounds(610, 265, 180, 50);
+        adultSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e)
+            {
+                int value = adultSlider.getValue();
+                adultLabel.setText(String.valueOf(value));
+            }
+        });
+
+        frame.getContentPane().add(adultSlider);
+
+        //elderly slider
+        JLabel elderlyTitleLabel = new JLabel("ElderlyClient:");
+        elderlyTitleLabel.setBounds(510, 320, 80, 25);
+        frame.getContentPane().add(elderlyTitleLabel);
+
+        elderlyLabel = new JLabel(String.valueOf(numberOfElderly));
+        elderlyLabel.setBounds(590, 320, 20, 25);
+        frame.getContentPane().add(elderlyLabel);
+
+        elderlySlider = new JSlider(JSlider.HORIZONTAL, 0,6, numberOfElderly);
+        elderlySlider.setMinorTickSpacing(1);
+        elderlySlider.setMajorTickSpacing(2);
+        elderlySlider.setPaintTicks(true);
+        elderlySlider.setPaintLabels(true);
+        elderlySlider.setBounds(610, 320, 180, 50);
+        elderlySlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e)
+            {
+                int value = elderlySlider.getValue();
+                elderlyLabel.setText(String.valueOf(value));
+            }
+        });
+
+        frame.getContentPane().add(elderlySlider);
+
+        show();
+
+    }
+
+    public JPanel getStorePanel(){
+        return storePanel;
+    }
+
+    public void show()
+    {
+        frame.setVisible(true);
+    }
+
     public void runSimulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
-        // Alternatywna pętla z delayem, ale wtedy nie dziala while loop
-        //ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        //executorService.scheduleAtFixedRate(() -> {
-
         try {
             while (!shop.getClients().isEmpty() && (numberOfPromotional-boughtByChild-boughtByAdult-boughtByElderly)!=0) {
-                Thread.sleep(20);
-                window.show();
+                Thread.sleep(10);
+                //shop = window.getShop();
+                //window.show();
                 for (int i = 0; i < shop.getClients().size(); i++) {
                     // interakcje miedzy klientami
                     int interactions = 0;
@@ -84,15 +352,11 @@ public class Simulation
                     }
                 }
                 // Wyswietlanie mapy
-                //window.revalidate();
-                window.getStorePanel().repaint();
+                getStorePanel().repaint();
             }
         } catch (InterruptedException ex) {
             System.out.println("Error.");
         }
-
-        // ALternatywna petla z delayem, ale nie dziala wtedy while
-        //}, 0, 500, TimeUnit.MILLISECONDS);
 
         // zliczanie rezultatow symulacji
         System.out.println("\nWYNIKI SYMULACJI\n");
@@ -100,14 +364,6 @@ public class Simulation
         System.out.println("Liczba klientow typu Adult: " + numberOfAdult);
         System.out.println("Liczba klientow typu Elderly: " + numberOfElderly);
         System.out.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
-
-        // zliczenie, ile zostalo promocyjnych produktow
-        /*int promotionalLeft = 0;
-        for (Product product : shop.getProducts()) {
-            if (product.isPromotional()) {
-                promotionalLeft++;
-            }
-        }*/
 
         int productsSold = 0;
         for (Product product : shop.getProducts()) {
@@ -120,6 +376,7 @@ public class Simulation
         System.out.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
         System.out.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
         System.out.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly);
+
 
         // zapis wynikow symulacji do pliku WynikiSymulacji.txt
         try {
@@ -141,19 +398,35 @@ public class Simulation
 
     }
 
+    private void resetSimulation() {
+        // Clear existing clients and reset boughtBy* variables
+        shop.getClients().clear();
+        boughtByChild = 0;
+        boughtByAdult = 0;
+        boughtByElderly = 0;
+
+        // Initialize the shop and clients with new slider values
+        int numberOfPromotional = promotionalSlider.getValue();
+        int numberOfChild = childSlider.getValue();
+        int numberOfAdult = adultSlider.getValue();
+        int numberOfElderly = elderlySlider.getValue();
+        shop = new Shop(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        clientsIndexes.clear();
+
+        // Set up the clientsIndexes map
+        for(int i = 0; i < shop.getClients().size(); i++) {
+            clientsIndexes.put(shop.getClient(i), i);
+        }
+    }
+
 
     public static void main(String[] args)
     {
-        int numberOfPromotional = 40;
-        int numberOfChild = 1;
-        int numberOfAdult = 1;
-        int numberOfElderly = 1;
-
-        Simulation simulation = new Simulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-        simulation.runSimulation(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+        SwingUtilities.invokeLater(() -> {
+            Simulation simulation = new Simulation(0,0,0,0);
+        });
     }
 
 }
-
 
 
