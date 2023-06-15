@@ -165,7 +165,7 @@ public class Simulation
         titleLabel.setBounds(320, 10, 250, 25);
         frame.getContentPane().add(titleLabel);
 
-        //przyciski start/stop
+        //przycisk start
         start = new JButton("START");
         start.setBackground(dark_green);
         start.setBounds(580,90,130,40);
@@ -301,11 +301,10 @@ public class Simulation
 
     public void runSimulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
+        getStorePanel().repaint();
         try {
             while (!shop.getClients().isEmpty() && (numberOfPromotional-boughtByChild-boughtByAdult-boughtByElderly)!=0) {
-                Thread.sleep(10);
-                //shop = window.getShop();
-                //window.show();
+                Thread.sleep(20);
                 for (int i = 0; i < shop.getClients().size(); i++) {
                     // interakcje miedzy klientami
                     int interactions = 0;
@@ -351,7 +350,7 @@ public class Simulation
                         shop.clientLeaves(shop.getClient(i));
                     }
                 }
-                // Wyswietlanie mapy
+                // Zaktualizowanie mapy (GUI)
                 getStorePanel().repaint();
             }
         } catch (InterruptedException ex) {
@@ -372,10 +371,10 @@ public class Simulation
             }
         }
 
-        System.out.println("Liczba sprzedanych produktow promocyjnych: " + productsSold/*(numberOfPromotional - promotionalLeft)*/);
+        System.out.println("Liczba sprzedanych produktow promocyjnych: " + productsSold);
         System.out.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
         System.out.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
-        System.out.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly);
+        System.out.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly + "\n");
 
 
         // zapis wynikow symulacji do pliku WynikiSymulacji.txt
@@ -387,7 +386,7 @@ public class Simulation
             zapis.println("Liczba klientow typu Adult: " + numberOfAdult);
             zapis.println("Liczba klientow typu Elderly: " + numberOfElderly + "\n");
             zapis.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
-            zapis.println("Liczba sprzedanych produktow promocyjnych: " + productsSold /*(numberOfPromotional - promotionalLeft)*/);
+            zapis.println("Liczba sprzedanych produktow promocyjnych: " + productsSold);
             zapis.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
             zapis.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
             zapis.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly);
@@ -428,5 +427,4 @@ public class Simulation
     }
 
 }
-
 
