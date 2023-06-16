@@ -2,15 +2,15 @@ class Product
 {
     private int x;
     private int y;
-    private boolean isPromotional;
-    private boolean isSold;
+    private boolean promotional;
+    private boolean sold;
 
-    public Product(int x, int y, boolean isPromotional)
+    public Product(int x, int y, boolean promotional)
     {
         this.x = x;
         this.y = y;
-        this.isPromotional = isPromotional;
-        this.isSold = false;
+        this.promotional = promotional;
+        this.sold = false;
     }
 
     public int getX(){
@@ -19,17 +19,15 @@ class Product
     public int getY(){
         return this.y;
     }
-    public boolean isPromotional()
+    public boolean getPromotional()
     {
-        return isPromotional;
+        return this.promotional;
     }
-    /*public void isSold(){
-        this.isPromotional = false;
-    }*/
+    public boolean getSold(){
+        return this.sold;
+    }
     public void isSold(){
-        this.isSold = true;
+        this.sold = true;
     }
-    public boolean ifSold(){
-        return this.isSold;
-    }
+
 }
