@@ -35,14 +35,6 @@ public abstract class Client implements IClient
         }
     }
 
-    public int getXLocation()
-    {
-        return this.x;
-    }
-    public int getYLocation(){
-        return this.y;
-    }
-
     public int tryToGet(ArrayList<Product> products)
     {
         int index = -1;
@@ -50,7 +42,7 @@ public abstract class Client implements IClient
         {
             if(this.x == products.get(i).getX() && this.y == products.get(i).getY())
             {
-                if(products.get(i).isPromotional()==true && products.get(i).ifSold()==false)
+                if(products.get(i).getPromotional()==true && products.get(i).getSold()==false)
                     index = i;
             }
         }
@@ -68,6 +60,13 @@ public abstract class Client implements IClient
         } else {
             return false;
         }
+    }
+    public int getXLocation()
+    {
+        return this.x;
+    }
+    public int getYLocation(){
+        return this.y;
     }
 
 }
