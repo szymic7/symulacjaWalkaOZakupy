@@ -5,15 +5,11 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 
 public class Simulation
 {
     private Shop shop;
-    private HashMap<Client, Integer> clientsIndexes;
+    private HashMap<Client, Integer> clientsIndexes; // aby klienci mieli stale indeksy
 
     private static int boughtByChild = 0;
     private static int boughtByAdult = 0;
@@ -38,10 +34,139 @@ public class Simulation
     {
         this.shop = new Shop(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
         this.clientsIndexes = new HashMap<>();
-        initialize(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-
         for(int i=0; i<shop.getClients().size(); i++)
         {
+            clientsIndexes.put(shop.getClient(i), i);
+        }
+        initialize(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
+    }
+
+    public JPanel getStorePanel(){
+        return storePanel;
+    }
+
+    public void show()
+    {
+        frame.setVisible(true);
+    }
+
+    public void runSimulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
+    {
+        getStorePanel().repaint();
+        try {
+            while (!shop.getClients().isEmpty() && (numberOfPromotional-boughtByChild-boughtByAdult-boughtByElderly)!=0) {
+
+                // delay, aby dostosowywac predkosc symulacji do potrzeb
+                Thread.sleep(20);
+
+                for (int i = 0; i < shop.getClients().size(); i++) {
+
+                    // interakcje miedzy klientami
+                    int interactions = 0;
+                    for (int j = 0; j < shop.getClients().size(); j++) {
+                        if ((shop.getClient(i).getXLocation() == shop.getClient(j).getXLocation()) &&
+                                (shop.getClient(i).getYLocation() == shop.getClient(j).getYLocation()))
+                        // pierwszy warunek - dwoch klientow na tym samym polu
+                        {
+                            if ((shop.getClient(i) instanceof ChildClient && (shop.getClient(j) instanceof AdultClient || shop.getClient(j) instanceof ElderlyClient))
+                                    || (shop.getClient(i) instanceof AdultClient && shop.getClient(j) instanceof ElderlyClient))
+                            // drugi warunek - (client i to ChildClient a client j to AdultClient albo ElderlyClient) lub
+                            // (klient i to AdultClient a client j to ElderlyClient)
+                            {
+                                System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
+                                        "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
+                                interactions++;
+                            }
+                        }
+                    }
+
+                    // jesli klient nie mial zadnych interakcji (nikogo nie przepuszczal) to przechodzi do ruchu
+                    if (interactions == 0) {
+                        shop.getClient(i).move(); // ruch klienta
+                        System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") x = " + shop.getClient(i).getXLocation() + ", y = " + shop.getClient(i).getYLocation());
+
+                        // sprawdzenie, czy stojac na danym polu klient moze wejsc w interakcje z produktem promocyjnym
+                        if ((shop.getClient(i).tryToGet(shop.getProducts())) > -1) {
+                            // Jesli moze to nastepuje sprawdzenie, czy jest w stanie "dosiegnac"/"dostrzec" produkt i podniesc go
+                            if (shop.getClient(i).tryToBuy(shop.getProducts().get(shop.getClient(i).tryToGet(shop.getProducts())))) {
+                                System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") zakupil produkt promocyjny.");
+                                if (shop.getClient(i) instanceof ChildClient) {
+                                    boughtByChild++;
+                                } else if (shop.getClient(i) instanceof AdultClient) {
+                                    boughtByAdult++;
+                                } else if (shop.getClient(i) instanceof ElderlyClient) {
+                                    boughtByElderly++;
+                                }
+                            } else {
+                                System.out.println("Klientowi(" + clientsIndexes.get(shop.getClient(i)) + ") nie udalo sie zakupic produktu promocyjnego.");
+                            }
+                        }
+                        // sprawdzenie, czy klient trafil do kasy
+                        shop.clientLeaves(shop.getClient(i));
+                    }
+                }
+                // Zaktualizowanie mapy (GUI)
+                getStorePanel().repaint();
+            }
+        } catch (InterruptedException ex) {
+            System.out.println("Error.");
+        }
+
+        // zliczanie rezultatow symulacji
+        System.out.println("\nWYNIKI SYMULACJI\n");
+        System.out.println("Liczba klientow typu Child: " + numberOfChild);
+        System.out.println("Liczba klientow typu Adult: " + numberOfAdult);
+        System.out.println("Liczba klientow typu Elderly: " + numberOfElderly);
+        System.out.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
+
+        int productsSold = 0;
+        for (Product product : shop.getProducts()) {
+            if (product.getSold()) {
+                productsSold++;
+            }
+        }
+
+        System.out.println("Liczba sprzedanych produktow promocyjnych: " + productsSold);
+        System.out.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
+        System.out.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
+        System.out.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly + "\n");
+
+
+        // zapis wynikow symulacji do pliku WynikiSymulacji.txt
+        try {
+            PrintWriter zapis = new PrintWriter("WynikiSymulacji.txt");
+            zapis.println("----- WYNIKI SYMULACJI -----\n");
+            zapis.println("Klienci bioracy udzial w symulacji:");
+            zapis.println("Liczba klientow typu Child: " + numberOfChild);
+            zapis.println("Liczba klientow typu Adult: " + numberOfAdult);
+            zapis.println("Liczba klientow typu Elderly: " + numberOfElderly + "\n");
+            zapis.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
+            zapis.println("Liczba sprzedanych produktow promocyjnych: " + productsSold);
+            zapis.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
+            zapis.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
+            zapis.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly);
+            zapis.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+    }
+
+    private void resetSimulation() {
+
+        shop.getClients().clear();
+        boughtByChild = 0;
+        boughtByAdult = 0;
+        boughtByElderly = 0;
+
+        int newNumberOfPromotional = promotionalSlider.getValue();
+        int newNumberOfChild = childSlider.getValue();
+        int newNumberOfAdult = adultSlider.getValue();
+        int newNumberOfElderly = elderlySlider.getValue();
+        shop = new Shop(newNumberOfPromotional, newNumberOfChild, newNumberOfAdult, newNumberOfElderly);
+        clientsIndexes.clear();
+
+        for(int i = 0; i < shop.getClients().size(); i++) {
             clientsIndexes.put(shop.getClient(i), i);
         }
     }
@@ -118,6 +243,10 @@ public class Simulation
                     int productX;
                     int productY = y*20;
 
+                    // wartości współrzędnych x produktów nie odpowiadają miejscu "na półce", a miejscu, z którego dany produkt można podnieść
+                    // (aby łatwo porownywac wspolrzedne klienta i produktu, sprawdzając, czy może wystąpić interakcja)
+                    // dlatego w zaleznosci od regału, do x dodajemy 1 lub odejmujemy 1 (aby na mapie byl we wlasciwym miejscu)
+
                     if(i%2==1)
                     {
                         productX = (x+1) * 20;
@@ -127,15 +256,15 @@ public class Simulation
                         productX = (x-1) * 20;
                     }
 
-                    if (product.isPromotional() && !product.ifSold())
+                    if (product.getPromotional() && !product.getSold())
                     {
                         g.setColor(Color.YELLOW);
                     }
-                    else if (!product.isPromotional())
+                    else if (!product.getPromotional())
                     {
                         g.setColor(brown);
                     }
-                    else if (product.ifSold())
+                    else if (product.getSold())
                     {
                         g.setColor(Color.GRAY);
                     }
@@ -145,7 +274,7 @@ public class Simulation
                     g.drawRect(productX, productY, 20, 20);
 
                     // rysowanie znakow % na produktach promocyjnych
-                    if (product.isPromotional() && !product.ifSold()){
+                    if (product.getPromotional() && !product.getSold()){
                         g.setColor(Color.BLACK);
                         g.setFont(new Font("Calibri", Font.BOLD, 17));
                         g.drawString("%", productX+4, productY+16);
@@ -213,6 +342,7 @@ public class Simulation
 
         //child slider
         JLabel childTitleLabel = new JLabel("ChildClient:");
+        childTitleLabel.setForeground(dark_red);
         childTitleLabel.setBounds(510, 210, 80, 25);
         frame.getContentPane().add(childTitleLabel);
 
@@ -238,6 +368,7 @@ public class Simulation
 
         //adult slider
         JLabel adultTitleLabel = new JLabel("AdultClient:");
+        adultTitleLabel.setForeground(Color.BLUE);
         adultTitleLabel.setBounds(510, 265, 80, 25);
         frame.getContentPane().add(adultTitleLabel);
 
@@ -263,6 +394,7 @@ public class Simulation
 
         //elderly slider
         JLabel elderlyTitleLabel = new JLabel("ElderlyClient:");
+        elderlyTitleLabel.setForeground(dark_green);
         elderlyTitleLabel.setBounds(510, 320, 80, 25);
         frame.getContentPane().add(elderlyTitleLabel);
 
@@ -286,136 +418,9 @@ public class Simulation
 
         frame.getContentPane().add(elderlySlider);
 
+        // wyswietlenie GUI
         show();
 
-    }
-
-    public JPanel getStorePanel(){
-        return storePanel;
-    }
-
-    public void show()
-    {
-        frame.setVisible(true);
-    }
-
-    public void runSimulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
-    {
-        getStorePanel().repaint();
-        try {
-            while (!shop.getClients().isEmpty() && (numberOfPromotional-boughtByChild-boughtByAdult-boughtByElderly)!=0) {
-                Thread.sleep(20);
-                for (int i = 0; i < shop.getClients().size(); i++) {
-                    // interakcje miedzy klientami
-                    int interactions = 0;
-                    for (int j = 0; j < shop.getClients().size(); j++) {
-                        if ((shop.getClient(i).getXLocation() == shop.getClient(j).getXLocation()) &&
-                                (shop.getClient(i).getYLocation() == shop.getClient(j).getYLocation()))
-                        // pierwszy warunek - dwoch klientow na tym samym polu
-                        {
-                            if ((shop.getClient(i) instanceof ChildClient && (shop.getClient(j) instanceof AdultClient || shop.getClient(j) instanceof ElderlyClient))
-                                    || (shop.getClient(i) instanceof AdultClient && shop.getClient(j) instanceof ElderlyClient))
-                            // drugi warunek - (client i to ChildClient a client j to AdultClient albo ElderlyClient) lub
-                            // (klient i to AdultClient a client j to ElderlyClient)
-                            {
-                                System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") przepuscil " +
-                                        "klienta(" + clientsIndexes.get(shop.getClient(j)) + ").");
-                                interactions++;
-                            }
-                        }
-                    }
-
-                    // jesli klient nie mial zadnych interakcji (nikogo nie przepuszczal) to przechodzi do ruchu
-                    if (interactions == 0) {
-                        shop.getClient(i).move(); // ruch klienta
-                        System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") x = " + shop.getClient(i).getXLocation() + ", y = " + shop.getClient(i).getYLocation());
-
-                        // sprawdzenie, czy stojac na danym polu klient moze wejsc w interakcje z produktem promocyjnym
-                        if ((shop.getClient(i).tryToGet(shop.getProducts())) > -1) {
-                            // sprawdzenie, czy klient jest w stanie "dosiegnac"/"dostrzec" produkt i podniesc go
-                            if (shop.getClient(i).tryToBuy(shop.getProducts().get(shop.getClient(i).tryToGet(shop.getProducts())))) {
-                                System.out.println("Klient(" + clientsIndexes.get(shop.getClient(i)) + ") zakupil produkt promocyjny.");
-                                if (shop.getClient(i) instanceof ChildClient) {
-                                    boughtByChild++;
-                                } else if (shop.getClient(i) instanceof AdultClient) {
-                                    boughtByAdult++;
-                                } else if (shop.getClient(i) instanceof ElderlyClient) {
-                                    boughtByElderly++;
-                                }
-                            } else {
-                                System.out.println("Klientowi(" + clientsIndexes.get(shop.getClient(i)) + ") nie udalo sie zakupic produktu promocyjnego.");
-                            }
-                        }
-                        // sprawdzenie, czy klient trafil do kasy
-                        shop.clientLeaves(shop.getClient(i));
-                    }
-                }
-                // Zaktualizowanie mapy (GUI)
-                getStorePanel().repaint();
-            }
-        } catch (InterruptedException ex) {
-            System.out.println("Error.");
-        }
-
-        // zliczanie rezultatow symulacji
-        System.out.println("\nWYNIKI SYMULACJI\n");
-        System.out.println("Liczba klientow typu Child: " + numberOfChild);
-        System.out.println("Liczba klientow typu Adult: " + numberOfAdult);
-        System.out.println("Liczba klientow typu Elderly: " + numberOfElderly);
-        System.out.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
-
-        int productsSold = 0;
-        for (Product product : shop.getProducts()) {
-            if (product.ifSold()) {
-                productsSold++;
-            }
-        }
-
-        System.out.println("Liczba sprzedanych produktow promocyjnych: " + productsSold);
-        System.out.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
-        System.out.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
-        System.out.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly + "\n");
-
-
-        // zapis wynikow symulacji do pliku WynikiSymulacji.txt
-        try {
-            PrintWriter zapis = new PrintWriter("WynikiSymulacji.txt");
-            zapis.println("----- WYNIKI SYMULACJI -----\n");
-            zapis.println("Klienci bioracy udzial w symulacji:");
-            zapis.println("Liczba klientow typu Child: " + numberOfChild);
-            zapis.println("Liczba klientow typu Adult: " + numberOfAdult);
-            zapis.println("Liczba klientow typu Elderly: " + numberOfElderly + "\n");
-            zapis.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
-            zapis.println("Liczba sprzedanych produktow promocyjnych: " + productsSold);
-            zapis.println("Produkty zakupione przez klientow typu Child: " + boughtByChild);
-            zapis.println("Produkty zakupione przez klientow typu Adult: " + boughtByAdult);
-            zapis.println("Produkty zakupione przez klientow typu Elderly: " + boughtByElderly);
-            zapis.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-    }
-
-    private void resetSimulation() {
-        // Clear existing clients and reset boughtBy* variables
-        shop.getClients().clear();
-        boughtByChild = 0;
-        boughtByAdult = 0;
-        boughtByElderly = 0;
-
-        // Initialize the shop and clients with new slider values
-        int numberOfPromotional = promotionalSlider.getValue();
-        int numberOfChild = childSlider.getValue();
-        int numberOfAdult = adultSlider.getValue();
-        int numberOfElderly = elderlySlider.getValue();
-        shop = new Shop(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
-        clientsIndexes.clear();
-
-        // Set up the clientsIndexes map
-        for(int i = 0; i < shop.getClients().size(); i++) {
-            clientsIndexes.put(shop.getClient(i), i);
-        }
     }
 
 
