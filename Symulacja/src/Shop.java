@@ -6,28 +6,20 @@ public class Shop
     private static final int MapSize = 20;
     private ArrayList<Client> clients;
     private ArrayList<Product> products;
-    private int numberOfPromotional;
-    private int numberOfChild;
-    private int numberOfAdult;
-    private int numberOfElderly;
 
     public Shop(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         this.clients = new ArrayList<>();
         this.products = new ArrayList<Product>();
-        this.numberOfPromotional = numberOfPromotional;
-        this.numberOfChild = numberOfChild;
-        this.numberOfAdult = numberOfAdult;
-        this.numberOfElderly = numberOfElderly;
 
         // zmienne potrzebne do inicjalizowania
-        int allClients = this.numberOfAdult + this.numberOfChild + this.numberOfElderly;
+        int allClients = numberOfChild + numberOfAdult + numberOfElderly;
         Integer[][] respCoordinates = new Integer[allClients][2];
         ArrayList<Integer> randomPromotional = new ArrayList<>();
 
         Random random = new Random();
 
-        // create & spawn ChildClient
+        // tworzenie klientów typu ChildClient
         int i=0;
         while(i<numberOfChild)
         {
@@ -62,7 +54,7 @@ public class Shop
             }
         }
 
-        // create & spawn AdultClient
+        // tworzenie klientów typu AdultClient
         while(i<(numberOfAdult+numberOfChild))
         {
             int x = random.nextInt(MapSize);
@@ -84,10 +76,9 @@ public class Shop
                 clients.add(new AdultClient(x, y));
                 i++;
             }
-
         }
 
-        // create & spawn ElderlyClient
+        // tworzenie klientów typu ElderlyClient
         while(i<(allClients))
         {
             int x = random.nextInt(MapSize);
@@ -111,7 +102,7 @@ public class Shop
             }
         }
 
-        // create nonPromotionalProducts
+        // tworzenie pdouktów niepromocyjnych
         for(int y1=5; y1<15; y1++)
         {
             products.add(new Product(2, y1, false));
@@ -122,7 +113,7 @@ public class Shop
             products.add(new Product(17, y1, false));
         }
 
-        // swap random products for PromotionalProducts
+        // zamiana lospwych produktów niepromocyjnych na promocyjne
         i=0;
         while(i<numberOfPromotional)
         {
