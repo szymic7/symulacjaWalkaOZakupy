@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+/**
+ * Klasa odpowiedzialna za przeprowadzanie symulacji
+ */
 public class Simulation
 {
     private Shop shop;
@@ -30,6 +33,14 @@ public class Simulation
     private static final Color dark_red = new Color(215,0,0);
     private static final Color brown = new Color(150,75,0);
 
+    /**
+     * Konstruktor obiektów typu Simulation
+     * @param numberOfPromotional liczba produktów promocyjnych występujących w symulacji
+     * @param numberOfChild liczba klientów typu <code>ChildClient</code> biorących udział w symulacji
+     * @param numberOfAdult liczba klientów typu <code>AdultClient</code> biorących udział w symulacji
+     * @param numberOfElderly liczba klientów typu <code>EldelryClient</code> biorących udział w symulacji
+     */
+
     public Simulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         this.shop = new Shop(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
@@ -41,15 +52,29 @@ public class Simulation
         initialize(numberOfPromotional, numberOfChild, numberOfAdult, numberOfElderly);
     }
 
+    /**
+     * Metoda zwraca storePanel, czyli mapę, wyświetlaną na GUI
+     * @return storePanel - mapa, wyświetlana na GUI
+     */
     public JPanel getStorePanel(){
         return storePanel;
     }
 
+    /**
+     * Ustawia widoczność GUI na <code>true</code>
+     */
     public void show()
     {
         frame.setVisible(true);
     }
 
+    /**
+     * Metoda odpowiedzialna za urochomienie symulacji
+     * @param numberOfPromotional liczba produktów promocyjnych występujących w symulacji
+     * @param numberOfChild liczba klientów typu <code>ChildClient</code> biorących udział w symulacji
+     * @param numberOfAdult liczba klientów typu <code>AdultClient</code> biorących udział w symulacji
+     * @param numberOfElderly liczba klientów typu <code>EldelryClient</code> biorących udział w symulacji
+     */
     public void runSimulation(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         getStorePanel().repaint();
@@ -120,8 +145,10 @@ public class Simulation
         System.out.println("Liczba produktow promocyjnych na początku symulacji: " + numberOfPromotional);
 
         int productsSold = 0;
-        for (Product product : shop.getProducts()) {
-            if (product.getSold()) {
+        for (Product product : shop.getProducts())
+        {
+            if (product.getSold())
+            {
                 productsSold++;
             }
         }
@@ -152,7 +179,11 @@ public class Simulation
 
     }
 
-    private void resetSimulation() {
+    /**
+     * Metoda odpowiedzialna za resetowanie symulacji
+     */
+    public void resetSimulation()
+    {
 
         shop.getClients().clear();
         boughtByChild = 0;
@@ -166,11 +197,19 @@ public class Simulation
         shop = new Shop(newNumberOfPromotional, newNumberOfChild, newNumberOfAdult, newNumberOfElderly);
         clientsIndexes.clear();
 
-        for(int i = 0; i < shop.getClients().size(); i++) {
+        for(int i = 0; i < shop.getClients().size(); i++)
+        {
             clientsIndexes.put(shop.getClient(i), i);
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za wygenerowanie GUI
+     * @param numberOfPromotional liczba produktów promocyjnych występujących w symulacji
+     * @param numberOfChild liczba klientów typu <code>ChildClient</code> biorących udział w symulacji
+     * @param numberOfAdult liczba klientów typu <code>AdultClient</code> biorących udział w symulacji
+     * @param numberOfElderly liczba klientów typu <code>EldelryClient</code> biorących udział w symulacji
+     */
     public void initialize(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         //ustawienia okna
@@ -423,7 +462,10 @@ public class Simulation
 
     }
 
-
+    /**
+     * Statyczna metoda <code>main</code>, w której tworzona jest symulacja
+     * @param args
+     */
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(() -> {
