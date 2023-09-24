@@ -1,12 +1,22 @@
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * Klasa reprezentująca mapę - sklep
+ */
 public class Shop
 {
     private static final int MapSize = 20;
     private ArrayList<Client> clients;
     private ArrayList<Product> products;
 
+    /**
+     * Konstruktor obiektów typu <code>Shop</code>
+     * @param numberOfPromotional liczba prodkutów promocyjnych w sklepie
+     * @param numberOfChild liczba klientów typu <code>ChildClient</code> w sklepie
+     * @param numberOfAdult liczba klientów typu <code>AdultClient</code> w sklepie
+     * @param numberOfElderly liczba klientów typu <code>ElderlyClient</code> w sklepie
+     */
     public Shop(int numberOfPromotional, int numberOfChild, int numberOfAdult, int numberOfElderly)
     {
         this.clients = new ArrayList<>();
@@ -152,21 +162,38 @@ public class Shop
         }
     }
 
+    /**
+     * Zwraca z listy klientów klienta o podanym indeksie
+     * @param indexOfClient indeks klienta z listy klientów
+     * @return Klient o podanym indeksie
+     */
     public Client getClient(int indexOfClient)
     {
         return clients.get(indexOfClient);
     }
 
+    /**
+     * Zwraca listę klientów sklepu
+     * @return Lista klientów sklepu
+     */
     public ArrayList<Client> getClients()
     {
         return clients;
     }
 
+    /**
+     * Zwraca listę wszystkich produktów w sklepie
+     * @return Lista produktów w sklepie
+     */
     public ArrayList<Product> getProducts()
     {
         return products;
     }
 
+    /**
+     * Metoda odpowiedzialna za sprawdzenie, czy klient natrafił na kasę i trzeba go usunąć ze sklepu
+     * @param client klient, dla którego sprawdzane jest, czy natrafił na kasę
+     */
     public void clientLeaves(Client client)
     {
         if(client.getXLocation()>=18 && client.getYLocation()>=18)
