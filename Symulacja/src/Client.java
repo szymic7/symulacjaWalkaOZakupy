@@ -1,6 +1,9 @@
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * Klasa abstrakcyjna, reprezentująca klienta sklepu
+ */
 public abstract class Client implements IClient
 {
     private int x;
@@ -8,6 +11,13 @@ public abstract class Client implements IClient
     private int chanceOfGetting;
     private int speed;
 
+    /**
+     * Konstruktor obiektu typu <code>Client</code>
+     * @param x współrzędna x klienta
+     * @param y współrzędna y klienta
+     * @param chanceOfGetting procentowa szansa klienta na podniesienie produktu
+     * @param speed szybkość poruszania się - procentowa szansa klienta na wykonanie ruchu w danej turze
+     */
     public Client(int x, int y, int chanceOfGetting, int speed)
     {
         this.x = x;
@@ -16,6 +26,9 @@ public abstract class Client implements IClient
         this.speed = speed;
     }
 
+    /**
+     * Metoda odpowiedziala za ruch klienta, dla którego jest wywoływana
+     */
     public void move()
     {
         Random random = new Random();
@@ -35,6 +48,11 @@ public abstract class Client implements IClient
         }
     }
 
+    /**
+     * Metoda iterująca po wszystkich produktach i zwracająca indeks produktu, który może zostać podniesiony przez klienta
+     * @param products lista wszystkich produktów w sklepie
+     * @return indeks produktu, który klient może podnieść stojąc w danym miejscu lub <code>-1</code>, gdy nie ma takiego produktu
+     */
     public int tryToGet(ArrayList<Product> products)
     {
         int index = -1;
@@ -51,6 +69,11 @@ public abstract class Client implements IClient
         // jesli nie ma takiego produktu - zwraca -1
     }
 
+    /**
+     * Metoda zwracająca wartość typu <code>boolean</code> informującą, czy klientowi udało się podnieść produkt
+     * @param product produkt, który może zostać podniesiony przez klienta
+     * @return Czy klientowi udało się podnieść produkt?
+     */
     public boolean tryToBuy(Product product)
     {
         Random random = new Random();
@@ -61,16 +84,29 @@ public abstract class Client implements IClient
             return false;
         }
     }
+
+    /**
+     * Metoda zwracająca współrzędną x produktu
+     * @return współrzędna x produktu
+     */
     public int getXLocation()
     {
         return this.x;
     }
+
+    /**
+     Metoda zwracająca współrzędną y produktu
+     * @return współrzędna y produktu
+     */
     public int getYLocation(){
         return this.y;
     }
 
 }
 
+/**
+ * Interfejs klienta
+ */
 interface IClient
 {
     void move();
